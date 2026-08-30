@@ -1,12 +1,18 @@
 import ollama from 'ollama';
-// import cors from 'cors';
 import { master_prompt } from "./helper.js";
 import webRes from './webRes.js';
 
-// app.use(cors());  
-export default async function llmRes(userQuery){
-  let webResults = await webRes(userQuery);
+export default async function llmRes(userQuery, webResults){
+  // let webResults = await webRes(userQuery);
   // Construct the LLM payload
+  const structuredWebResults = JSON.stringify(
+    webResults.raw.map((el, index) => ({
+      source_id: index + 1,
+      title: el.title,
+      url: el.url,
+      content: el.content
+    }))
+  );
   const messages = [
     { 
       role: "system", 
@@ -14,7 +20,7 @@ export default async function llmRes(userQuery){
     },
     { 
       role: "user", 
-      content: `USER QUERY:\n${userQuery}\n\nWEB SEARCH RESULTS:\n${webResults}` 
+      content: `USER QUERY:\n${userQuery}\n\nWEB SEARCH RESULTS:\n${structuredWebResults}` 
     }
   ];
   const response = await ollama.chat({
@@ -22,6 +28,4 @@ export default async function llmRes(userQuery){
       messages, 
   });
   console.log(response);
-
-    
 }
