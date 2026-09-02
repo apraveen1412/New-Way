@@ -1,12 +1,11 @@
 import ollama from 'ollama';
 import { master_prompt } from "./helper.js";
-import webRes from './webRes.js';
 
 export default async function llmRes(userQuery, webResults){
   // let webResults = await webRes(userQuery);
   // Construct the LLM payload
   const structuredWebResults = JSON.stringify(
-    webResults.raw.map((el, index) => ({
+    webResults.data.raw.map((el, index) => ({
       source_id: index + 1,
       title: el.title,
       url: el.url,
@@ -28,4 +27,5 @@ export default async function llmRes(userQuery, webResults){
       messages, 
   });
   console.log(response);
+  return response;
 }

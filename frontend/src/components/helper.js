@@ -1,22 +1,10 @@
-import dotenv from "dotenv";
-import {tavily} from '@tavily/core';
 
-
-dotenv.config();
-const tvly = tavily({ apiKey: process.env.TAVILY_API_KEY });
 
 export async function webRes(userQuery){
 
     try {
-      console.log('From webRes search query: ',userQuery);
     // Execute the search
-    const response = await tvly.search(userQuery, {
-      searchDepth: "basic", // "basic" is faster, "advanced" scrapes deeper
-      maxResults: 5,        // Keep this low to avoid exceeding LLM context windows
-      includeAnswer: false, // We use our own LLM to generate the answer
-      includeDomains: [],   // Optional: restrict to specific sites (e.g., ["wikipedia.org"])
-      excludeDomains: []    // Optional: block specific sites
-    });
+    const response = await webResults;
 
     // Format the raw results for LLM Prompt
     const formattedResults = response.results.map((result, index) => {
