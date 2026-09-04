@@ -3,11 +3,13 @@ import ReactMarkdown from 'react-markdown';
 export default function Response({AIres}){
     let resStyle = {
         textAlign: 'left',
-        width: '80vw',
+        width: '100vw',
+        height: '90vh',
         display: 'flex',
         flexDirection: 'column',
         alignSelf: 'center',
-        marginTop: '2rem',
+        backgroundColor: '#4727fd',
+        flexWrap: 'wrap',
     };
     return(
         <div style={resStyle}>

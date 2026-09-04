@@ -1,0 +1,32 @@
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 25vw;
+    transition: width 0.25s ease;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.sidebar-open {
+    width: 30vw;
+}
+
+.sidebar-closed {
+    width: 70px;
+}
+
+.main-content {
+    min-height: 100vh;
+    transition: margin-left 0.25s ease;
+}
+
+.content-sidebar-open {
+    margin-left: 260px;
+}
+
+.content-sidebar-closed {
+    margin-left: 70px;
+}

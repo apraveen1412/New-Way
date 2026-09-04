@@ -12,6 +12,7 @@
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.84",
     "axios": "^1.20.0",
+    "bootstrap": "^5.3.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-markdown": "^10.1.0"
