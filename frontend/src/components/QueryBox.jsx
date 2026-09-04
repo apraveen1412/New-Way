@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import './QueryBox.css';
+
 export default  function QueryBox({getWebRes, getUserQuery}){
     let [userQuery, setUserQuery]= useState('');
 
@@ -12,46 +14,22 @@ export default  function QueryBox({getWebRes, getUserQuery}){
         getWebRes(result);
         getUserQuery(userQuery);
     }
-    let qForm = {
-        backgroundColor: '#1e1f20',
-        width: "90%",
-        borderRadius: '0.5rem',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginRight: '2rem',
-    }
-    let qBoxStyle={
-        backgroundColor: '#1e1f20',
-        // width: '100%',
-        height: '4vh',
-        padding: '0rem',
-        borderRadius: '0.5rem',
-        paddingLeft: '1rem'
-    };
-    let qSubmit={
-        backgroundColor: 'blue',
-        border: 'none',
-        width: '2rem',
-        height: '2rem',
-        borderRadius: '50%',
-        margin: '0rem',
-        marginRight: '0.5rem'
-    }
+    
     
     return(
-        <form onSubmit={handleSubmbit} style={qForm} >
+        <form onSubmit={handleSubmbit} className='qForm' >
             <input 
                 type="text" 
                 name="userQuery" 
                 placeholder="Ask something..." 
                 id="userQuery" value={userQuery} 
                 onChange={(e)=>setUserQuery(e.target.value)} 
-                className="form-control-plaintext"
-                style={qBoxStyle}
+                className="qBoxStyle form-control-plaintext"
             />
 
-            <button type="submit" id="qSubmit" style={qSubmit}><i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i></button>
+            <button type="submit" id="qSubmit" className='qSubmit btn btn-primary'>
+                <i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i>
+            </button>
         </form>
     );
 }
