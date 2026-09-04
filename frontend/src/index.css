@@ -1,9 +1,6 @@
-:root {
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+#root{
+  background-color: #212529;
 }
-
 body {
   margin: 0;
 }

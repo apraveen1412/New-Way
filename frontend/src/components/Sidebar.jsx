@@ -16,10 +16,7 @@ export default function Sidebar() {
 
                     {/* Sidebar Header */}
                     <div className="d-flex align-items-center justify-content-between p-3">
-                        {open && (
-                            <h5 className="mb-0">New Way</h5>
-                        )}
-
+                        {open && ( <h5 className="mb-0">New Way</h5>)}
                         <button className="btn btn-dark" onClick={() => setOpen(!open)}>
                             <i className="fa-solid fa-bars"></i>
                         </button>
@@ -40,10 +37,8 @@ export default function Sidebar() {
             </aside>
 
             {/* Main Content */}
-            <main className={`main-content ${
-                    open ? "content-sidebar-open" : "content-sidebar-closed"
-                }`}>
-                {/* Your chat UI goes here */}
+            <main className={`main-content ${ open ? "content-sidebar-open" : "content-sidebar-closed"}`}>
+                {/* chat UI goes here */}
             </main>
         </>
     );

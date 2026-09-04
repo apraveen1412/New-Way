@@ -19,13 +19,14 @@ export default  function QueryBox({getWebRes, getUserQuery}){
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginRight: '1rem',
+        marginRight: '2rem',
     }
     let qBoxStyle={
         backgroundColor: '#1e1f20',
-        width: '100%',
+        // width: '100%',
         height: '4vh',
         padding: '0rem',
+        borderRadius: '0.5rem',
         paddingLeft: '1rem'
     };
     let qSubmit={

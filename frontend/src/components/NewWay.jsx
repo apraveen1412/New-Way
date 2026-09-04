@@ -5,6 +5,8 @@ import QueryBox from "./QueryBox";
 import Response from './Response';
 import Sidebar from "./sidebar";
 
+// import './NewWay.css';
+
 export default function NewWay(){
     let [webResults, setWebResults]=useState(null);
     let [userQuery, setUserQuery]= useState('');
@@ -23,21 +25,18 @@ export default function NewWay(){
       if(webResults===null && userQuery==='') return;
       onDeviceAI(userQuery, webResults, setNewResponse);  // gets the user query and web results from QueryBox.jsx and  pass it to AI model for inference
     },[userQuery, webResults]);
-
-    let newWayBody = {
-      display: 'flex', 
-      flexDirection: 'column',
-      width:'100%',
-    }
     
     return(
-        <div style={{display: 'flex', width: '100vw', height: '100vh'}} className='d-flex'>
-            <Sidebar />
-            <div style={newWayBody}>
+        <div className="new-way-app">
+          <Sidebar />
+          {/* <div className=""> */}
+            <main className='chat-container'>
                 <Response AIres={newResponse}/>
                 <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery}/>
-            </div>
-            <script src='./LocalAI.js'></script>
+            </main>
+          {/* </div> */}
+          <script src='./LocalAI.js'></script>
         </div>
+        
     );
 }
