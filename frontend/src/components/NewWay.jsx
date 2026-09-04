@@ -1,5 +1,5 @@
 import {useEffect, useState } from 'react';
-import {onDeviceAI} from '../webllm.js';
+import {onDeviceAI} from '../LocalAI.js';
 
 import QueryBox from "./QueryBox";
 import Response from './Response';
@@ -23,15 +23,21 @@ export default function NewWay(){
       if(webResults===null && userQuery==='') return;
       onDeviceAI(userQuery, webResults, setNewResponse);  // gets the user query and web results from QueryBox.jsx and  pass it to AI model for inference
     },[userQuery, webResults]);
+
+    let newWayBody = {
+      display: 'flex', 
+      flexDirection: 'column',
+      width:'100%',
+    }
     
     return(
-        <div style={{display: 'flex', width: '100vw', height: '100vh'}}>
+        <div style={{display: 'flex', width: '100vw', height: '100vh'}} className='d-flex'>
             <Sidebar />
-            <div style={{display: 'flex', flexDirection: 'column'}}>
+            <div style={newWayBody}>
                 <Response AIres={newResponse}/>
                 <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery}/>
             </div>
-            <script src='./webllm.js'></script>
+            <script src='./LocalAI.js'></script>
         </div>
     );
 }

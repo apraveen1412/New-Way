@@ -19,6 +19,7 @@ export default  function QueryBox({getWebRes, getUserQuery}){
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        marginRight: '1rem',
     }
     let qBoxStyle={
         backgroundColor: '#1e1f20',

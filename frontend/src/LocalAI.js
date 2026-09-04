@@ -1,9 +1,5 @@
 import { master_prompt, webRes } from "./components/helper";
 
-
-
-  
-
 export async function onDeviceAI(userQuery, webResults, resStream){
   console.log("AI model loaded");
   const session = await LanguageModel.create({
