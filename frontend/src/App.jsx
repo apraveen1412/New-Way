@@ -1,4 +1,4 @@
-import NewWay from './components/newWay';
+import NewWay from './components/NewWay';
 import './App.css'
 
 function App() {

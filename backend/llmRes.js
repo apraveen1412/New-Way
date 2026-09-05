@@ -5,7 +5,7 @@ export default async function llmRes(userQuery, webResults){
   // let webResults = await webRes(userQuery);
   // Construct the LLM payload
   const structuredWebResults = JSON.stringify(
-    webResults.data.raw.map((el, index) => ({
+    webResults?.data?.raw.map((el, index) => ({
       source_id: index + 1,
       title: el.title,
       url: el.url,

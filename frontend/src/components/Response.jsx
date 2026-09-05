@@ -8,7 +8,6 @@ export default function Response({AIres}){
         display: 'flex',
         flexDirection: 'column',
         alignSelf: 'center',
-        // backgroundColor: '#4727fd',
         flexWrap: 'wrap',
         color: "white"
     };

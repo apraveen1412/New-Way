@@ -27,10 +27,9 @@ export default function Sidebar() {
                         <div className="px-3">
                             <button className="btn btn-outline-light w-100 mb-2">
                                 <i className="fa-solid fa-plus me-2"></i>New Chat</button>
-                            <button className="btn btn-dark w-100 text-start mb-2">
-                                <i className="fa-solid fa-cloud me-2"></i>Cloud AI</button>
-                            <button className="btn btn-dark w-100 text-start">
-                                <i className="fa-solid fa-microchip me-2"></i>Local AI</button>
+                            <ul className='conversationHistory'>
+
+                            </ul>
                         </div>
                     )}
                 </div>

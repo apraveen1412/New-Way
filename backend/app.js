@@ -44,6 +44,7 @@ app.post('/conversation', async(req, res, next)=>{
 });
 
 app.post('/conversation/onDevice', async(req, res, next)=>{
+    if(req.body.userQuery === '') return;
     console.log(req.body);
     let userPrompt = req.body?.userQuery;
     let webResults = await webRes(userPrompt);

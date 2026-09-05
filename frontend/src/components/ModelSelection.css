@@ -1,0 +1,13 @@
+.dropdown-toggle{color: white !important}
+.dropdown-menu{
+    background-color: #2d3338 !important;
+    color: white !important;
+    width: 5rem
+}
+.dropdown-item{
+    color: white !important;;
+}
+.dropdown-item:hover{background-color: rgb(155 196 255 / 27%) !important}
+.dropdown-item:active{background-color: #425563 !important;}
+
+.dropdown-toggle:active, .dropdown-toggle:hover{border: none;}
