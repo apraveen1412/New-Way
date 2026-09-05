@@ -7,14 +7,14 @@ export default  function QueryBox({getWebRes, getUserQuery}){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
 
-    let BACKEND_ENDPOINT = '/conversation';
-    let FRONTEND_ENDPOINT = '/conversation/onDevice';
+    // let BACKEND_ENDPOINT = '/conversation';
+    // let FRONTEND_ENDPOINT = '/conversation/onDevice';
 
     const handleSubmbit = async (event)=>{
         event.preventDefault();
         console.log(selectModel);
-        let API_ENDPOINT=selectModel;
-        let result = await axios.post(API_ENDPOINT, {userQuery: userQuery});
+        // let API_ENDPOINT=selectModel;
+        let result = await axios.post(selectModel, {userQuery: userQuery});
         getWebRes(result);
         getUserQuery(userQuery);
     }

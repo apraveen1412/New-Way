@@ -34,16 +34,22 @@ app.listen(8080, ()=>console.log("Server is running on port: 8080"));
 // });
 
 app.post('/conversation', async(req, res, next)=>{
-    console.log(req.body);
-    let userPrompt = req.body.userQuery;
-    
-    let webResults = await webRes(userPrompt);
-    let LLM_res = await llmRes(userPrompt, webResults);
-
-    res.send(LLM_res);
+    // console.log(req.body);
+    console.log('/conversation');
+    let userPrompt = req.body?.userQuery;
+    try {
+        let webResults = await webRes(userPrompt);
+        let LLM_res = await llmRes(userPrompt, webResults);
+        console.log(LLM_res);
+        res.send(LLM_res);
+    } catch (error) {
+        console.error("/conversation failed:", error.message);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.post('/conversation/onDevice', async(req, res, next)=>{
+    console.log('/conversation/onDevice');
     if(req.body.userQuery === '') return;
     console.log(req.body);
     let userPrompt = req.body?.userQuery;

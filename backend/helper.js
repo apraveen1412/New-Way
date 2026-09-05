@@ -19,7 +19,7 @@ export async function webRes(userQuery){
     });
 
     // Format the raw results for LLM Prompt
-    const formattedResults = response.results.map((result, index) => {
+    const formattedResults = response?.results.map((result, index) => {
       return `[${index + 1}] ${result.title} (${result.url}): ${result.content}`;
     }).join('\n\n');
 
@@ -47,11 +47,16 @@ You will be provided with a user query and a JSON array of web search results. E
 4. **Formatting:** Use Markdown heavily. Use bullet points for lists, bold text for emphasis, and tables for comparisons.
 5. **No Fluff:** Do not use introductory filler (e.g., "Here is the answer to your question..."). Jump straight into the answer.
 
+### CRITICAL: JSON Syntax and Escaping
+You must output ONLY valid, parsable JSON. 
+If you need to quote a word, title, or phrase inside your text, you MUST use single quotes ('like this') instead of double quotes. 
+NEVER use unescaped double quotes inside your JSON string values, as it will instantly break the application.
+
 ### Output Structure
-You must output a valid JSON object with the following schema exactly. Do not output markdown code blocks wrapping the JSON. 
+You must output a valid JSON object with the following schema exactly. Do not output markdown code blocks (like \`\`\`json) wrapping the JSON. Output only the raw JSON object itself.
 
 {
-  "answer": "Your fully formatted markdown response with inline citations here.",
+  "answer": "Your fully formatted markdown response with inline citations here. Remember to use single quotes if you need to 'quote' something.",
   "follow_ups": [
     "A highly relevant, specific follow-up question the user might want to ask next?",
     "Another specific follow-up question?"
