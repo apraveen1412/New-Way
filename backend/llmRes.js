@@ -1,7 +1,7 @@
 import ollama from 'ollama';
 import { master_prompt } from "./helper.js";
 
-export default async function llmRes(userQuery, webResults){
+export default async function llmRes(userQuery, webResults, req, res){
   // let webResults = await webRes(userQuery);
   // Construct the LLM payload
   const structuredWebResults = JSON.stringify(
@@ -12,7 +12,7 @@ export default async function llmRes(userQuery, webResults){
       content: el.content
     }))
   );
-  console.log("Structured web results sent to LLM:", webResults);
+  // console.log("Structured web results sent to LLM:", webResults);
   const messages = [
     { 
       role: "system", 
@@ -24,20 +24,18 @@ export default async function llmRes(userQuery, webResults){
     }
   ];
 try {
-    const response = await ollama.chat({
-        model: 'llama3.1:8b',
-        messages, 
-    });
-    console.log(response);
-    return response;
-  } catch (error) {
-    // Node's fetch wraps connection-level failures (server not running, wrong
-    // port, etc.) as a generic "TypeError: fetch failed" and hides the real
-    // reason in error.cause. Surface it so it actually shows up in the logs.
-    console.error("Ollama request failed:", error.message);
-    if (error.cause) console.error("Cause:", error.cause);
-    throw new Error(
-      `Failed to get a response from the local LLM. Is 'ollama serve' running and is 'llama3.1:8b' pulled? (${error.message})`
-    );
-  }
+  const response = await ollama.chat({
+      model: 'llama3.1:8b',
+      messages, 
+      stream: true,
+  });
+  // console.log(response);
+  return response;
+} catch (error) {
+  console.error("Ollama request failed:", error.message);
+  if (error.cause) console.error("Cause:", error.cause);
+  throw new Error(
+    `Failed to get a response from the local LLM. Is 'ollama serve' running and is 'llama3.1:8b' pulled? (${error.message})`
+  );
+}
 }

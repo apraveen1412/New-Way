@@ -44,10 +44,6 @@ export async function onDeviceAI(userQuery, webResults, resStream){
     resStream(finalRes);
     console.log(finalRes);
   };
-  // let temp = JSON.parse(finalRes.slice(8, -3));
-  // console.log(temp);
-  // console.log('Actual response: ', temp?.answer);
-  // resStream(temp?.answer);
   
   let answer = "";
 

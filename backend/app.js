@@ -28,23 +28,41 @@ app.use(express.json());
 
 app.listen(8080, ()=>console.log("Server is running on port: 8080"));
 
-// app.get('/', (req, res)=>res.redirect('/conversation'));
-// app.get('/conversation', (req, res, next)=>{
-//     res.send("Hello world");
-// });
 
 app.post('/conversation', async(req, res, next)=>{
-    // console.log(req.body);
     console.log('/conversation');
     let userPrompt = req.body?.userQuery;
     try {
         let webResults = await webRes(userPrompt);
         let LLM_res = await llmRes(userPrompt, webResults);
-        console.log(LLM_res);
-        res.send(LLM_res);
+        
+         // Tells the browser this is a streaming response
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.setHeader('Transfer-Encoding', 'chunked');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
+
+        for await (const chunk of LLM_res) {
+
+            const text = chunk?.message?.content;
+
+            if (text) {
+                res.write(text);
+            }
+        }
+
+        // Tells frontend that stream is finished
+        res.end();
+        
     } catch (error) {
         console.error("/conversation failed:", error.message);
-        res.status(500).json({ error: error.message });
+        if (!res.headersSent) {
+            res.status(500).json({
+                error: error.message
+            });
+        } else {
+            res.end();
+        }
     }
 });
 

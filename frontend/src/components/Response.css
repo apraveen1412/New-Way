@@ -22,11 +22,11 @@
 }
 
 .resStyle::-webkit-scrollbar-thumb {
-  background-color: #2f4358;
+  background-color: #9f9f9f;
   border-radius: 8px; /* Rounds the scrollbar handle */
 }
 
 /* Hover effect for the thumb */
 .resStyle::-webkit-scrollbar-thumb:hover {
-  background-color: #284058;
+  background-color: #c2c2c2;
 }

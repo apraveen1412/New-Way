@@ -32,7 +32,7 @@ export default function NewWay(){
           {/* <div className=""> */}
             <main className='chat-container'>
                 <Response AIres={newResponse}/>
-                <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery}/>
+                <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} />
             </main>
           {/* </div> */}
           <script src='./LocalAI.js'></script>
