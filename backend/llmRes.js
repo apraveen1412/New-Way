@@ -1,8 +1,10 @@
-import ollama from 'ollama';
+import OpenAI from 'openai';
 import { master_prompt } from "./helper.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default async function llmRes(userQuery, webResults, req, res){
-  // let webResults = await webRes(userQuery);
   // Construct the LLM payload
   const structuredWebResults = JSON.stringify(
     webResults?.raw.map((el, index) => ({
@@ -24,18 +26,21 @@ export default async function llmRes(userQuery, webResults, req, res){
     }
   ];
 try {
-  const response = await ollama.chat({
-      model: 'llama3.1:8b',
-      messages, 
+  const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+  })
+  const response = await client.responses.create({
+      model: 'gpt-5.6-luna',
+      input: messages, 
       stream: true,
   });
   // console.log(response);
   return response;
 } catch (error) {
-  console.error("Ollama request failed:", error.message);
+  console.error("OpenAI request failed:", error.message);
   if (error.cause) console.error("Cause:", error.cause);
   throw new Error(
-    `Failed to get a response from the local LLM. Is 'ollama serve' running and is 'llama3.1:8b' pulled? (${error.message})`
+    `Failed to get a response from the GPT 5.6 Luna. (${error.message})`
   );
 }
 }
