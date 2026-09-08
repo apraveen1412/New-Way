@@ -21,10 +21,9 @@ export default function NewWay(){
       setUserQuery(uq);
     }
 
-    useEffect(()=>{
-      if(webResults===null && userQuery==='') return;
-      onDeviceAI(userQuery, webResults, setNewResponse);  // gets the user query and web results from QueryBox.jsx and  pass it to AI model for inference
-    },[userQuery, webResults]);
+    // useEffect(()=>{
+    //     // gets the user query and web results from QueryBox.jsx and  pass it to AI model for inference
+    // },[userQuery, webResults]);
     
     return(
         <div className="new-way-app">

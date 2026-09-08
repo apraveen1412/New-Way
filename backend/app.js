@@ -42,12 +42,9 @@ app.post('/conversation', async(req, res, next)=>{
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');
 
-        for await (const chunk of LLM_res) {
-
-            const text = chunk?.message?.content;
-
-            if (text) {
-                res.write(text);
+        for await (const event of LLM_res) {
+            if (event.type === "response.output_text.delta") {
+                res.write(event.delta);
             }
         }
 

@@ -1,4 +1,4 @@
-import { master_prompt, webRes } from "./components/helper";
+import { master_prompt } from "./components/helper";
 
 export async function onDeviceAI(userQuery, webResults, resStream){
   console.log("AI model loaded");

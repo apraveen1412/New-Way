@@ -2,13 +2,18 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './QueryBox.css';
 import ModelSelection from './ModelSelection';
+import { onDeviceAI } from '../LocalAI';
+import { webRes } from './helper';
 
 export default  function QueryBox({getWebRes, getUserQuery, AIres}){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
+    let [localWebResults, setLocalWebResults]=useState(null);
 
-    // let BACKEND_ENDPOINT = '/conversation';
-    // let FRONTEND_ENDPOINT = '/conversation/onDevice';
+    const endpoints = {
+        local: '/conversation/onDevice',
+        cloud: '/conversation'
+    };
 
     const handleSubmbit = async (event) => {
     event.preventDefault();
@@ -16,50 +21,63 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
     console.log(selectModel);
 
     // Chrome built-in / on-device model
-    if (selectModel === 'Gemini nano (Local)') {
+    if (selectModel === endpoints.local && userQuery!=='') {
         const result = await axios.post(selectModel,{userQuery: userQuery});
 
-        getWebRes(result);
+        setLocalWebResults(result);
         getUserQuery(userQuery);
+        
+        onDeviceAI(userQuery, result, AIres);
 
         return;
     }
-
-    // Ollama streaming
-    const result = await fetch(selectModel,
-        {
-            method: 'POST',
+    else if(selectModel === endpoints.cloud && userQuery!==''){
+        // GPT 5.6 Luna streaming
+        const result = await fetch(selectModel, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 userQuery: userQuery
             })
+        });
+
+        if (!result.ok) {
+            throw new Error(`Request failed: ${result.status}`);
         }
-    );
 
-    if (!result.ok) {
-        throw new Error(`Request failed: ${result.status}`);
-    }
+        if (!result.body) {
+            throw new Error("Response body is empty");
+        }
 
-    const reader = result.body.getReader();
-    const decoder = new TextDecoder();
+        const reader = result.body.getReader();
+        const decoder = new TextDecoder();
 
-    let answer = "";
+        let answer = "";
 
-    getUserQuery(userQuery);
+        getUserQuery(userQuery);
 
-    while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, {stream: true});
-        answer += chunk;
-        console.log("Received:", chunk);
+        while (true) {
+            const { value, done } = await reader.read();
+
+            if (done) break;
+
+            const chunk = decoder.decode(value, { stream: true });
+
+            answer += chunk;
+
+            console.log("Received:", chunk);
+        }
+
+        // Process any remaining decoder data
+        answer += decoder.decode();
+        
+        console.log("Final answer:", answer);
+
         AIres(answer);
+        setUserQuery("");
     }
-    console.log(answer);
-    AIres(answer);
-    setUserQuery('');
 };
     
     let qSubmit={
@@ -90,11 +108,10 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
             />
 
             <ModelSelection aiModel={aiModel}/>
-            <input type="hidden" name="model" value={selectModel} required/>
+            {/* <input type="hidden" name="model" value={selectModel} required/> */}
             <button type="submit" id="qSubmit" className='qSubmit btn btn-primary' style={qSubmit}>
                 <i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i>
             </button>
         </form>
     );
 }
-// action={BACKEND_ENDPOINT} method="post"
