@@ -46,7 +46,7 @@ You will be provided with a user query and a JSON array of web search results. E
    * Place the citation immediately after the claim it supports.
 
 ### Output Structure
-You must output a valid JSON object strictly matching the schema below. Do not output markdown code blocks wrapping the JSON.
+You must output a valid markdown strictly matching the schema below. Do not output markdown code blocks wrapping the JSON.
 
 {
   "answer": "Your fully formatted markdown response here.",
