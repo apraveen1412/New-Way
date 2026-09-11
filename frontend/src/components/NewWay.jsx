@@ -2,7 +2,7 @@ import {useEffect, useState } from 'react';
 import {onDeviceAI} from '../LocalAI.js';
 
 import QueryBox from "./QueryBox";
-import Response from './Response';
+import Response from './ChatBody.jsx';
 import Sidebar from "./sidebar";
 
 // import './NewWay.css';
@@ -30,7 +30,7 @@ export default function NewWay(){
           <Sidebar />
           {/* <div className=""> */}
             <main className='chat-container'>
-                <Response AIres={newResponse}/>
+                <Response AIres={newResponse} userQuery={userQuery}/>
                 <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} />
             </main>
           {/* </div> */}

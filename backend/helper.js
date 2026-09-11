@@ -132,9 +132,9 @@ The sources section must contain the sources actually used or cited in the answe
 
 Represent each source as plain text in the following format:
 
-[1] Source title — https://example.com
+[1] Source title https://example.com
 
-[2] Another source title — https://example.org
+[2] Another source title https://example.org
 
 The number must exactly match the 'source_id' used in the inline citations.
 
@@ -171,8 +171,8 @@ Markdown response here.
 
 #### Sources
 
-[1] Source title — https://example.com
-[2] Another source title — https://example.org
+[1] Source title https://example.com
+[2] Another source title https://example.org
 
 #### Follow-up Questions
 

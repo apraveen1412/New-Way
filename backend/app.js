@@ -78,7 +78,7 @@ app.post('/conversation', async(req, res, next)=>{
           console.log('Event: \n');
           for await (const event of response){
             if(event.type === 'response.output_text.delta'){
-                console.log(event.delta);
+                // console.log(event.delta);
                 res.write(event.delta);
             }
           }

@@ -67,6 +67,8 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
 
             answer += chunk;
 
+            AIres(answer);
+
             console.log("Received:", chunk);
         }
 
