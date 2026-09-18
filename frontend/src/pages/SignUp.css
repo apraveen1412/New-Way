@@ -1,0 +1,28 @@
+.signUpPage{
+    height: 100vh;
+    color: white;
+}
+.SignUpForm{
+    position: relative;
+    width: 45vw;
+    height: auto;
+    background-color: rgb(52 52 52 / 40%);
+    border-radius: 2rem;
+}
+/* Blurred layer inside the form */
+.SignUpForm::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 0;
+    border-radius: 2rem;
+}
+
+/* Keep form elements above the blur */
+.SignUpForm > * {
+    position: relative;
+    z-index: 1;
+}

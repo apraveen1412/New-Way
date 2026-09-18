@@ -3,12 +3,13 @@ import mongoose from "mongoose";
 const messagesSchema = new mongoose.Schema({
     userquery: String,
     aiResponse: String,
-    followUps: [String],
-    modelType: {
-        type: String,
-        enum: ['cloud', 'local'],
-        required: true,
-    },
+    // modelType: {
+    //     type: String,
+    //     enum: ['cloud', 'local'],
+    //     required: true,
+    // },
+    createdAt: String,
+    updatedAt: String,
 });
 
 export const messages = mongoose.model('messages', messagesSchema);

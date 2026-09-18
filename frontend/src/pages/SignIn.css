@@ -1,0 +1,30 @@
+.signInPage {
+    height: 100vh;
+    color: white;
+}
+
+.SignInForm {
+    position: relative;
+    width: 45vw;
+    height: auto;
+    background-color: rgb(52 52 52 / 40%);
+    border-radius: 2rem;
+    overflow: hidden;
+}
+
+/* Blurred layer inside the form */
+.SignInForm::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 0;
+}
+
+/* Keep form elements above the blur */
+.SignInForm > * {
+    position: relative;
+    z-index: 1;
+}

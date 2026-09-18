@@ -1,9 +1,9 @@
 import {useEffect, useState } from 'react';
 import {onDeviceAI} from '../LocalAI.js';
 
-import QueryBox from "./QueryBox";
-import Response from './ChatBody.jsx';
-import Sidebar from "./sidebar";
+import QueryBox from "../components/QueryBox.jsx";
+import Response from '../components/ChatBody.jsx';
+import Sidebar from "../components/sidebar.jsx";
 
 // import './NewWay.css';
 
