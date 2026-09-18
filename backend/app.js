@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import { Strategy as localStrategy } from 'passport-local';
@@ -38,6 +39,7 @@ app.use(cors({
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
+app.use(cookieParser());
 // Configuring express session and mongo session store
 app.use(
     session({
@@ -79,6 +81,7 @@ app.post('/api/create/user', async (req, res) => {
         const newUser = new user({name,email});
         const savedUser = await user.register(newUser, password);
         console.log("User registered:", savedUser);
+        req.flash('success', 'User registered successfully');
         res.status(201).json({
             success: true,
             message: 'User registered successfully'

@@ -18,3 +18,17 @@
     background-color: rgb(9 9 9) !important;
 }
 #emailHelp{color:white !important}
+
+.errMsg{
+    /* background-color: blue;
+    margin: 0px;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    width: 45vw;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+    border-radius: 0.5rem;
+}
+.errMsg p{margin: 0px;}

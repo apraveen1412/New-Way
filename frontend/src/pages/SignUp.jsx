@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './SignUp.css';
 import axios from 'axios';
 
-export default function SignUp(){
+export default function SignUp({flashMsg}){
+  let[err, setErr]=useState(null);
   const navigate = useNavigate();  
   const handleSignup = async (e)=>{
       e.preventDefault();
@@ -13,7 +14,11 @@ export default function SignUp(){
       data.password = e.target[2].value;
       const msg = await axios.post('/api/create/user', data);
       console.log(msg);
-      // navigate('/home');
+      flashMsg();
+      if(msg.status===200)
+        navigate('/home');
+
+        
     }
 
     return(
