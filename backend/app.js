@@ -35,6 +35,7 @@ app.use(cors({
     origin: "http://localhost:5173"
 }));    
 
+
 // JSON data parsing enabler
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -70,18 +71,14 @@ passport.deserializeUser(user.deserializeUser()); // removing all the info about
 
 app.listen(8080, ()=>console.log("Server is running on port: 8080"));
 
-// app.get('/', async(req, res, next)=>{
-//   return
-// });
 
-app.post('/api/create/user', async (req, res) => {
+app.post('/api/auth/signup', async (req, res) => {
     try {
         console.log("Signup body:", req.body);
         const { name, email, password } = req.body;
         const newUser = new user({name,email});
         const savedUser = await user.register(newUser, password);
         console.log("User registered:", savedUser);
-        req.flash('success', 'User registered successfully');
         res.status(201).json({
             success: true,
             message: 'User registered successfully'
@@ -93,6 +90,13 @@ app.post('/api/create/user', async (req, res) => {
             message: error.message
         });
     }
+});
+
+app.post('/api/auth/signin', passport.authenticate('local',{ keepSessionInfo: true}), async (req, res) => {
+  res.status(201).json({
+            success: true,
+            message: 'Sign in successfully'
+        });
 });
 
 app.post('/api/conversation', async(req, res, next)=>{

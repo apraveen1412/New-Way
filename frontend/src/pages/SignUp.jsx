@@ -8,14 +8,15 @@ export default function SignUp({flashMsg}){
   const navigate = useNavigate();  
   const handleSignup = async (e)=>{
       e.preventDefault();
-      const data = {name, email, password};
-      data.name = e.target[0].value;
-      data.email = e.target[1].value;
-      data.password = e.target[2].value;
-      const msg = await axios.post('/api/create/user', data);
+      const data = {
+        name: e.target[0].value,
+        email: e.target[1].value,
+        password: e.target[2].value,
+      };
+      const msg = await axios.post('/api/auth/signup', data);
       console.log(msg);
-      flashMsg();
-      if(msg.status===200)
+      flashMsg(msg.data);
+      if(msg.status===201)
         navigate('/home');
 
         

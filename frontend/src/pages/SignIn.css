@@ -5,7 +5,7 @@
 
 .SignInForm {
     position: relative;
-    width: 45vw;
+    width: 40vw;
     height: auto;
     background-color: rgb(52 52 52 / 40%);
     border-radius: 2rem;
@@ -27,4 +27,52 @@
 .SignInForm > * {
     position: relative;
     z-index: 1;
+}
+
+
+
+/* Large tablets / small desktops */
+@media (max-width: 1200px) {
+    .SignInForm {
+        width: 50vw;
+    }
+}
+
+
+/* Tablets */
+@media (max-width: 992px) {
+    .SignInForm {
+        width: 40vw;
+    }
+}
+
+
+/* Small tablets / large phones */
+@media (max-width: 768px) {
+    .SignInForm {
+        width: 60vw;
+        border-radius: 1.5rem;
+        padding: 1rem 1.5rem !important;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 576px) {
+    .SignInForm {
+        width: 90vw;
+        border-radius: 1.25rem;
+        padding: 0.8rem 1rem !important;
+    }
+}
+
+
+/* Small mobile devices */
+@media (max-width: 400px) {
+    .SignInForm {
+        width: 90vw;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem !important;
+        margin: 1rem !important;
+    }
 }

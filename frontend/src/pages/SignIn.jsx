@@ -1,10 +1,36 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import './SignIn.css';
 
-export default function SignIn(){
+export default function SignIn({flashMsg}){
+  let[err, setErr]=useState(null);
+  const navigate = useNavigate();  
+  const handleSignIn = async (e)=>{
+    e.preventDefault();
+    const data = {
+      email: e.target[0].value,
+      password: e.target[1].value,
+    };
+    try{
+      const msg = await axios.post('/api/auth/signin', data);
+      console.log(msg);
+      flashMsg(msg.data);
+      navigate('/home');
+    }  
+    catch(err){
+      console.log(err.response?.data);
+      flashMsg({
+        success: false,
+        message: err.response?.data?.message || 'Sign in failed'
+      });
+      navigate('/sign-up');
+    }
+  }
     return(
         <div className="signInPage bg-black d-flex flex-column align-items-center justify-content-center">
-          <form className='SignInForm d-flex flex-column ps-5 pe-5 pt-3 pb-3  justify-content-between gap-4' >
+          <form className='SignInForm d-flex flex-column ps-5 pe-5 pt-3 pb-3  justify-content-between gap-4' onSubmit={handleSignIn}>
             <div className="signInInputs siginItem d-flex flex-column gap-1">
               <h3 className='m-0 mb-1 align-self-center'>Sign in</h3>
               

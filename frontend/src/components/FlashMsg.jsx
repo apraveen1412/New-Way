@@ -1,21 +1,21 @@
 import React from 'react'
 
-const FlashMsg = ({success, error}) => {
+const FlashMsg = ({flashMsg, setFlashMsg}) => {
   return (
-    <div>
-         {success && success.length>0 (  
-            <div class="alert alert-success alert-dismissible fade show newFlash " role="alert">
-                { success }
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-         )} 
-
-        {error && error.length>0 ( 
-            <div class="alert alert-danger alert-dismissible fade show newFlash" role="alert">
-                { error }
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        )} 
+    <div className={`FlashMsg ${flashMsg.message !== ''? 'show': ''} ${flashMsg.success ? 'success' : 'error'}`}>  
+        <div className={`alert ${flashMsg.success ? 'alert-success' : 'alert-danger'} alert-dismissible fade show`}  role="alert">
+            { flashMsg.message }
+            <button type="button" 
+            className="btn-close"
+            id='flash-btn-close' 
+            aria-label="Close" 
+            onClick={()=>{
+                setFlashMsg({
+                    success: false,
+                    message: ''
+                });
+            }}></button>
+        </div>
     </div>
   )
 }

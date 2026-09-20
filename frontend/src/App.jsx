@@ -8,14 +8,17 @@ import NewWay from './pages/NewWay';
 import { useState } from 'react';
 
 function App() {
-  let [flashMsg, setFlashMsg] = useState(null)
+  const [flashMsg, setFlashMsg] = useState({
+    success: false,
+    message: ''
+  });
   
   return (
     <>
       {/* <NewWay/> */}
-      <FlashMsg />
+      <FlashMsg flashMsg={flashMsg} setFlashMsg={setFlashMsg}/>
       <Routes>
-        <Route path='/' element={<SignIn />}/>
+        <Route path='/' element={<SignIn flashMsg={setFlashMsg}/>}/>
         <Route path='/sign-up' element={<SignUp flashMsg={setFlashMsg}/>}/>
         <Route path='/home' element={<NewWay />}/>
       </Routes>
