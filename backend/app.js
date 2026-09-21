@@ -118,17 +118,19 @@ app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
 
 app.post('/api/conversation/:model_name', async(req, res, next)=>{
   const modelName = req.params.model_name;
+  console.log("MODEL:", modelName);
+  console.log("BODY:", req.body);
   console.log(`/conversation/${modelName}`);
   let newConversation={};
   console.log(req.body);
   let currUser = req.session.passport.user;
-  if(req.body.conversationId !== ''){
+  if(req.body.conversationId === ''){
     newConversation = new conversation({
       conversationName: req.body.userQuery,
       // messages: req.body.messages,
     });
     
-    newConversation.save();
+    // newConversation.save();
   }
   let userPrompt = req.body?.userQuery;
   try {
@@ -166,10 +168,9 @@ app.post('/api/conversation/:model_name', async(req, res, next)=>{
             stream: true,
         });
         
-        console.log('Event: \n');
         for await (const event of response){
           if(event.type === 'response.output_text.delta'){
-              console.log(event.delta);
+              // console.log(event.delta);
               res.write(event.delta);
           }
         }

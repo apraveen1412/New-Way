@@ -14,13 +14,13 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
 
     const endpoints = {
         local: '/api/conversation/onDevice',
-        cloud: '/api/conversation'
     };
 
     const handleSubmbit = async (event) => {
     event.preventDefault();
 
-    console.log(selectModel);
+    console.log("selectModel:", selectModel);
+    console.log("userQuery:", userQuery);
 
     // Chrome built-in / on-device model
     if (selectModel === endpoints.local && userQuery!=='') {
@@ -33,7 +33,9 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
 
         return;
     }
-    else if(selectModel === endpoints.cloud && userQuery!==''){
+    else if(selectModel !== '' && userQuery!==''){
+        console.log("ABOUT TO FETCH");
+        console.log("URL:", selectModel);
         // GPT 5.6 Luna streaming
         const result = await fetch(selectModel, {
             method: "POST",
