@@ -92,21 +92,42 @@ app.post('/api/auth/signup', async (req, res) => {
     }
 });
 
-app.post('/api/auth/signin', passport.authenticate('local',{ keepSessionInfo: true}), async (req, res) => {
-  res.status(201).json({
-            success: true,
-            message: 'Sign in successfully'
-        });
+app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
+    passport.authenticate('local', (err, user, info) => {
+      if (err) { // operational errors like DB failures, session failure and more
+          return next(err);
+      }
+      if (!user) { // Handles errors of user credentials being falsy 
+          return res.status(401).json({
+              success: false,
+              message: info?.message || 'Invalid email or password'
+          });
+      }
+      req.logIn(user, (err) => {
+          if (err) {
+              return next(err);
+          }
+          res.status(200).json({
+              success: true,
+              message: 'Sign in successful'
+          });
+      });
+
+    })(req, res, next); // Executing the passport middleware in the current req res cycle.
 });
 
-app.post('/api/conversation', async(req, res, next)=>{
-  console.log('/conversation');
+app.post('/api/conversation/:model_name', async(req, res, next)=>{
+  const modelName = req.params.model_name;
+  console.log(`/conversation/${modelName}`);
   let newConversation={};
-  if(!req.body.conversationId){
+  console.log(req.body);
+  let currUser = req.session.passport.user;
+  if(req.body.conversationId !== ''){
     newConversation = new conversation({
-      conversationName: req.body.convName,
+      conversationName: req.body.userQuery,
       // messages: req.body.messages,
     });
+    
     newConversation.save();
   }
   let userPrompt = req.body?.userQuery;
@@ -140,7 +161,7 @@ app.post('/api/conversation', async(req, res, next)=>{
           apiKey: process.env.OPENAI_API_KEY
         })
         const response = await client.responses.create({
-            model: 'gpt-5.6-luna',
+            model: `${modelName}`,
             input: messages, 
             stream: true,
         });
@@ -148,7 +169,7 @@ app.post('/api/conversation', async(req, res, next)=>{
         console.log('Event: \n');
         for await (const event of response){
           if(event.type === 'response.output_text.delta'){
-              // console.log(event.delta);
+              console.log(event.delta);
               res.write(event.delta);
           }
         }

@@ -9,10 +9,12 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
+    let [conversationId, setConversationId] = useState('');
+    
 
     const endpoints = {
-        local: '/conversation/onDevice',
-        cloud: '/conversation'
+        local: '/api/conversation/onDevice',
+        cloud: '/api/conversation'
     };
 
     const handleSubmbit = async (event) => {
@@ -39,7 +41,9 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                userQuery: userQuery
+                userQuery: userQuery,
+                model: selectModel,
+                conversationId: conversationId
             })
         });
 
@@ -107,10 +111,12 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
                 id="userQuery" value={userQuery} 
                 onChange={(e)=>setUserQuery(e.target.value)} 
                 className="qBoxStyle form-control-plaintext"
+                required
             />
 
             <ModelSelection aiModel={aiModel}/>
-            {/* <input type="hidden" name="model" value={selectModel} required/> */}
+            <input type="hidden" name="model" value={`${selectModel}`} required/>
+            <input type="hidden" name="conversationId" />
             <button type="submit" id="qSubmit" className='qSubmit btn btn-primary' style={qSubmit}>
                 <i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i>
             </button>

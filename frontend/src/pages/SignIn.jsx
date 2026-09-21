@@ -10,7 +10,7 @@ export default function SignIn({flashMsg}){
   const handleSignIn = async (e)=>{
     e.preventDefault();
     const data = {
-      email: e.target[0].value,
+      username: e.target[0].value,
       password: e.target[1].value,
     };
     try{
