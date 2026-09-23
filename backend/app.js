@@ -158,19 +158,21 @@ app.post('/api/conversation/:model_name', async(req, res, next)=>{
       res.setHeader('Transfer-Encoding', 'chunked');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Connection', 'keep-alive');
+      let answer = '';
       try {
         const client = new OpenAI({
           apiKey: process.env.OPENAI_API_KEY
         })
         const response = await client.responses.create({
             model: `${modelName}`,
-            input: messages, 
+            input: messages,
             stream: true,
         });
-        
+        let fullResponse = '';
         for await (const event of response){
           if(event.type === 'response.output_text.delta'){
-              // console.log(event.delta);
+              fullResponse += event.delta;
+              
               res.write(event.delta);
           }
         }

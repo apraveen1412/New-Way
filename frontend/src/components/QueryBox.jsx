@@ -21,6 +21,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
 
     console.log("selectModel:", selectModel);
     console.log("userQuery:", userQuery);
+    let answer = "";
 
     // Chrome built-in / on-device model
     if (selectModel === endpoints.local && userQuery!=='') {
@@ -60,8 +61,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
         const reader = result.body.getReader();
         const decoder = new TextDecoder();
 
-        let answer = "";
-
         getUserQuery(userQuery);
 
         while (true) {
@@ -82,10 +81,9 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres}){
         answer += decoder.decode();
         
         console.log("Final answer:", answer);
-
-        AIres(answer);
         setUserQuery("");
     }
+    AIres(answer);
 };
     
     let qSubmit={
