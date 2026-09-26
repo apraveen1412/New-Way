@@ -119,6 +119,19 @@ app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
     })(req, res, next); // Executing the passport middleware in the current req res cycle.
 });
 
+app.get('/api/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Logout successful',
+    });
+  });
+});
+
 
 app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
   console.log(req.session.user);

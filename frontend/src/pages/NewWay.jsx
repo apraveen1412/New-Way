@@ -23,13 +23,11 @@ export default function NewWay({flashMsg}){
     
     return(
         <div className="new-way-app">
-          <Sidebar />
-          {/* <div className=""> */}
-            <main className='chat-container'>
-                <Response AIres={newResponse} userQuery={userQuery}/>
-                <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} />
-            </main>
-          {/* </div> */}
+          <Sidebar flashMsg={flashMsg} />
+          <main className='chat-container'>
+              <Response AIres={newResponse} userQuery={userQuery}/>
+              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} />
+          </main>
           <script src='./LocalAI.js'></script>
         </div>
         

@@ -1,7 +1,8 @@
 import './Sidebar.css';
 import { useState } from "react";
+import LogOutBtn from './LogOutBtn'
 
-export default function Sidebar() {
+export default function Sidebar({flashMsg}) {
     const [open, setOpen] = useState(true);
 
     return (
@@ -30,6 +31,8 @@ export default function Sidebar() {
                             <ul className='conversationHistory'>
 
                             </ul>
+                            
+                            <LogOutBtn flashMsg={flashMsg}/>
                         </div>
                     )}
                 </div>
