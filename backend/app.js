@@ -82,10 +82,17 @@ app.post('/api/auth/signup', async (req, res) => {
         const newUser = new user({name,email});
         const savedUser = await user.register(newUser, password);
         console.log("User registered:", savedUser);
-        res.status(201).json({
-            success: true,
-            message: 'User registered successfully'
-        });
+        req.login(savedUser, (err)=>{
+          if(err) return next(err);
+          res.status(201).json({
+              success: true,
+              message: 'User registered successfully',
+              user: {
+                username: savedUser.email,
+                password: savedUser.password,
+              }
+          });
+        })
     } catch (error) {
         console.error("SIGNUP ERROR:", error);
         res.status(500).json({

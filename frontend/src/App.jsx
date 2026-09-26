@@ -16,7 +16,6 @@ function App() {
   
   return (
     <>
-      {/* <NewWay/> */}
       <FlashMsg flashMsg={flashMsg} setFlashMsg={setFlashMsg}/>
       <Routes>
         <Route path='/' element={<SignIn flashMsg={setFlashMsg}/>}/>
