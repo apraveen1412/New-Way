@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import './QueryBox.css';
 import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
@@ -15,7 +17,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
     const endpoints = {
         local: '/api/conversation/onDevice',
     };
-
+    const navigate = useNavigate();
     const handleSubmbit = async (event) => {
     event.preventDefault();
 
@@ -36,7 +38,8 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
             return;
         }
         catch(err){
-            console.log(err);
+            // console.log(err);
+            navigate('/');
             flashMsg({
               success: false,
               message: err.response?.data?.message || 'You are not logged in, please sign in!'
@@ -93,6 +96,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
         }
         catch(err){
             console.log(err);
+            navigate('/');
             flashMsg({
               success: false,
               message: err.response?.data?.message || 'You are not logged in, please sign in!'
