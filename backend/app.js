@@ -75,24 +75,35 @@ passport.deserializeUser(user.deserializeUser()); // removing all the info about
 app.listen(8080, ()=>console.log("Server is running on port: 8080"));
 
 
-app.post('/api/auth/signup', async (req, res) => {
+app.post('/api/auth/signup', async (req, res, next) => {
     try {
-        console.log("Signup body:", req.body);
-        const { name, email, password } = req.body;
-        const newUser = new user({name,email});
-        const savedUser = await user.register(newUser, password);
-        console.log("User registered:", savedUser);
-        req.login(savedUser, (err)=>{
-          if(err) return next(err);
-          res.status(201).json({
+        let { name, email, password } = req.body;
+        if(typeof name === 'string' && typeof email === 'string' && typeof password === 'string'){
+          name = name.trim();
+          email = email.trim();
+          password = password.trim();
+          if (!name || !email || !password) {
+            return res.status(400).json({ success: false, message: 'All fields are required' });
+          }
+          const newUser = new user({name,email});
+          const savedUser = await user.register(newUser, password);
+
+          req.login(savedUser, (err)=>{
+            if(err) return next(err);
+            res.status(201).json({
               success: true,
               message: 'User registered successfully',
               user: {
-                username: savedUser.email,
-                password: savedUser.password,
+                id: savedUser._id,
+                name: savedUser.name,
+                email: savedUser.email,
               }
-          });
-        })
+            });
+          })
+        }
+        else{
+          return res.status(400).json({ success: false, message: 'Invalid input' });
+        }
     } catch (error) {
         console.error("SIGNUP ERROR:", error);
         res.status(500).json({
@@ -103,27 +114,38 @@ app.post('/api/auth/signup', async (req, res) => {
 });
 
 app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
-    passport.authenticate('local', (err, user, info) => {
-      if (err) { // operational errors like DB failures, session failure and more
-          return next(err);
+    let {username, password} = req.body;
+    if(typeof username === 'string' && typeof password === 'string'){
+      username = username.trim();
+      password = password.trim();
+      if (!username || !password) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
       }
-      if (!user) { // Handles errors of user credentials being falsy 
-          return res.status(401).json({
-              success: false,
-              message: info?.message || 'Invalid email or password'
-          });
-      }
-      req.logIn(user, (err) => {
-          if (err) {
-              return next(err);
-          }
-          res.status(200).json({
-              success: true,
-              message: 'Sign in successful'
-          });
-      });
+      passport.authenticate('local', (err, user, info) => {
+        if (err) { // operational errors like DB failures, session failure and more
+            return next(err);
+        }
+        if (!user) { // Handles errors of user credentials being falsy 
+            return res.status(401).json({
+                success: false,
+                message: info?.message || 'Invalid email or password'
+            });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            res.status(200).json({
+                success: true,
+                message: 'Sign in successful'
+            });
+        });
 
-    })(req, res, next); // Executing the passport middleware in the current req res cycle.
+      })(req, res, next); // Executing the passport middleware in the current req res cycle.
+    }
+    else{
+      return res.status(400).json({ success: false, message: 'Invalid email or password' });
+    }
 });
 
 app.get('/api/logout', (req, res, next) => {

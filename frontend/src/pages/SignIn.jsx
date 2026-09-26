@@ -36,11 +36,11 @@ export default function SignIn({flashMsg}){
               
               <div className="form-group w-100">
                 <label htmlFor="email">Email address</label>
-                <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
+                <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" name='username'/>
               </div>
               <div className="form-group w-100">
                 <label htmlFor="password">Password</label>
-                <input type="password" className="form-control" id="password" placeholder="Password" />
+                <input type="password" className="form-control" id="password" placeholder="Password" name='password' />
               </div>
             </div>
             <div className="siginItem d-flex flex-column">
