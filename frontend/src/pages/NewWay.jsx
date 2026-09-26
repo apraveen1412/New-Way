@@ -7,7 +7,7 @@ import Sidebar from "../components/sidebar.jsx";
 
 // import './NewWay.css';
 
-export default function NewWay(){
+export default function NewWay({flashMsg}){
     let [webResults, setWebResults]=useState(null);
     let [userQuery, setUserQuery]= useState('');
     let [newResponse, setNewResponse] = useState('');
@@ -20,10 +20,6 @@ export default function NewWay(){
     async function getUserQuery(uq) {
       setUserQuery(uq);
     }
-
-    // useEffect(()=>{
-    //     // gets the user query and web results from QueryBox.jsx and  pass it to AI model for inference
-    // },[userQuery, webResults]);
     
     return(
         <div className="new-way-app">
@@ -31,7 +27,7 @@ export default function NewWay(){
           {/* <div className=""> */}
             <main className='chat-container'>
                 <Response AIres={newResponse} userQuery={userQuery}/>
-                <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} />
+                <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} />
             </main>
           {/* </div> */}
           <script src='./LocalAI.js'></script>

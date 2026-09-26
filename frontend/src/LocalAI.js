@@ -69,7 +69,7 @@ export async function onDeviceAI(userQuery, webResults, resStream){
       answer = "*(Formatting error - Displaying raw output)*\n\n" + finalRes;
     }
   }
-  console.log('Actual response: ', answer);
+  // console.log('Actual response: ', answer);
   
   // Push the final, cleaned string to the UI (replaces the messy streaming JSON)
   resStream(answer);

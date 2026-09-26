@@ -20,7 +20,7 @@ function App() {
       <Routes>
         <Route path='/' element={<SignIn flashMsg={setFlashMsg}/>}/>
         <Route path='/sign-up' element={<SignUp flashMsg={setFlashMsg}/>}/>
-        <Route path='/home' element={<NewWay />}/>
+        <Route path='/home' element={<NewWay flashMsg={setFlashMsg}/>}/>
       </Routes>
     </>
   )

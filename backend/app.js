@@ -19,6 +19,9 @@ import {user} from './models/userSchema.js';
 import  { conversation } from './models/conversationSchema.js';
 import { messages } from './models/messagesSchema.js';
 
+// Authentication
+import { isLoggedIn } from './middleware/authenticate.js';
+
 
 dotenv.config();
 
@@ -116,8 +119,29 @@ app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
     })(req, res, next); // Executing the passport middleware in the current req res cycle.
 });
 
-app.post('/api/conversation/:model_name', async(req, res, next)=>{
+
+app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
+  console.log(req.session.user);
+  let newConversation={};
+  if(!req.body.conversationExist){
+    newConversation = new conversation({
+      conversationName: req.body.convName,
+      messages: req.body.messages,
+    });
+    newConversation.save();
+  }
+  console.log('/conversation/onDevice');
+  if(req.body.userQuery === '') return;
+  console.log(req.body);
+  let userPrompt = req.body?.userQuery;
+  let webResults = await webRes(userPrompt);
+  res.send(webResults);
+});
+
+app.post('/api/conversation/:model_name', isLoggedIn, async(req, res, next)=>{
   const modelName = req.params.model_name;
+  console.log(req.session.passport);
+  console.log(req.user);
   console.log("MODEL:", modelName);
   console.log("BODY:", req.body);
   console.log(`/conversation/${modelName}`);
@@ -198,21 +222,3 @@ app.post('/api/conversation/:model_name', async(req, res, next)=>{
       }
   }
 });
-
-app.post('/api/conversation/onDevice', async(req, res, next)=>{
-  let newConversation={};
-  if(!req.body.conversationExist){
-    newConversation = new conversation({
-      conversationName: req.body.convName,
-      messages: req.body.messages,
-    });
-    newConversation.save();
-  }
-  console.log('/conversation/onDevice');
-  if(req.body.userQuery === '') return;
-  console.log(req.body);
-  let userPrompt = req.body?.userQuery;
-  let webResults = await webRes(userPrompt);
-  res.send(webResults);
-});
-
