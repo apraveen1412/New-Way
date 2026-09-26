@@ -12,10 +12,10 @@ const LogOutBtn = ({flashMsg}) => {
     try{
         let logoutResults = await axios.get('/api/logout');
         navigate('/');
-        flashMsg(logoutResults.data);
+        flashMsg?.(logoutResults.data);
     }
     catch(err){
-        flashMsg({
+        flashMsg?.({
             success: false,
             message: err.message || 'Logout Failed',
         });

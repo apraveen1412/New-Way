@@ -3,7 +3,7 @@ import {onDeviceAI} from '../LocalAI.js';
 
 import QueryBox from "../components/QueryBox.jsx";
 import Response from '../components/ChatBody.jsx';
-import Sidebar from "../components/sidebar.jsx";
+import Sidebar from "../components/Sidebar.jsx";
 
 // import './NewWay.css';
 
