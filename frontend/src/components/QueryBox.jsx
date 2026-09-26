@@ -28,7 +28,10 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
     // Chrome built-in / on-device model
     if (selectModel === endpoints.local && userQuery!=='') {
         try{
-            const result = await axios.post(selectModel,{userQuery: userQuery});
+            const result = await axios.post(selectModel,{
+                userQuery: userQuery,
+                model: selectModel
+            });
             // flashMsg();
             setLocalWebResults(result);
             getUserQuery(userQuery);
@@ -135,7 +138,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
             />
 
             <ModelSelection aiModel={aiModel}/>
-            <input type="hidden" name="model" value={`${selectModel}`} required/>
+            {/* <input type="hidden" name="model" value={`${selectModel}`} required/> */}
             <input type="hidden" name="conversationId" />
             <button type="submit" id="qSubmit" className='qSubmit btn btn-primary' style={qSubmit}>
                 <i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i>

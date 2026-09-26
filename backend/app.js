@@ -133,26 +133,8 @@ app.get('/api/logout', (req, res, next) => {
 });
 
 
-app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
-  console.log(req.session.user);
-  let newConversation={};
-  if(!req.body.conversationExist){
-    newConversation = new conversation({
-      conversationName: req.body.convName,
-      messages: req.body.messages,
-    });
-    newConversation.save();
-  }
-  console.log('/conversation/onDevice');
-  if(req.body.userQuery === '') return;
-  console.log(req.body);
-  let userPrompt = req.body?.userQuery;
-  let webResults = await webRes(userPrompt);
-  res.send(webResults);
-});
-
-app.post('/api/conversation/:model_name', isLoggedIn, async(req, res, next)=>{
-  const modelName = req.params.model_name;
+app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
+  const modelName = req.body.model;
   console.log(req.session.passport);
   console.log(req.user);
   console.log("MODEL:", modelName);
@@ -235,3 +217,23 @@ app.post('/api/conversation/:model_name', isLoggedIn, async(req, res, next)=>{
       }
   }
 });
+
+
+app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
+  console.log(req.session.user);
+  let newConversation={};
+  if(!req.body.conversationExist){
+    newConversation = new conversation({
+      conversationName: req.body.convName,
+      messages: req.body.messages,
+    });
+    newConversation.save();
+  }
+  console.log('/conversation/onDevice');
+  if(req.body.userQuery === '') return;
+  console.log(req.body);
+  let userPrompt = req.body?.userQuery;
+  let webResults = await webRes(userPrompt);
+  res.send(webResults);
+});
+

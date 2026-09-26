@@ -13,7 +13,7 @@ export default function ModelSelection({aiModel}) {
     setDropdownName(e.target.innerText);
     if(e.target.innerText === 'Gemini nano (Local)')  return aiModel(Local_Endpoint);
     for(let i=1; i<models.length; i++)
-    if(e.target.innerText === models[i])  return aiModel(`${Cloud_Endpoint}/${modelNamer(models[i])}`);
+    if(e.target.innerText === models[i])  return aiModel(`${modelNamer(models[i])}`);
   }
    
     return (

@@ -6,6 +6,7 @@ import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import NewWay from './pages/NewWay';
 import { useState } from 'react';
+import NotFound from './pages/NotFound';
 
 function App() {
   const [flashMsg, setFlashMsg] = useState({
@@ -21,6 +22,7 @@ function App() {
         <Route path='/' element={<SignIn flashMsg={setFlashMsg}/>}/>
         <Route path='/sign-up' element={<SignUp flashMsg={setFlashMsg}/>}/>
         <Route path='/home' element={<NewWay flashMsg={setFlashMsg}/>}/>
+        <Route path='*' element={<NotFound/>}/>
       </Routes>
     </>
   )
