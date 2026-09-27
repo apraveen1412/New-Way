@@ -1,0 +1,18 @@
+.inputQuery p{
+    background-color: rgb(53, 73, 73);
+    display: inline-block;
+    padding:0.5rem 0.6rem;
+    border-radius: 0.5rem;
+
+}
+.aiResponse{
+    background-color: #244949;
+    border-radius: 0.5rem;
+    width: 96%;
+}
+
+a{color: white}
+a:hover{
+    transform: scale(1.01);
+    transition: transform 0.3s ease-out;
+}

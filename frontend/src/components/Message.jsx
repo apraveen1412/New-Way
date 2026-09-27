@@ -1,4 +1,7 @@
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import './Message.css'
 
 export default function Message({AIres, userQuery}){
     let answer = ''; 
@@ -9,6 +12,16 @@ export default function Message({AIres, userQuery}){
     const followUpMarker = '#### Follow-up';
     let sourcesIndex = AIres.indexOf(sourceMarker);
     let followUpIndex = AIres.indexOf(followUpMarker);
+    const citationSchema = {
+        ...defaultSchema,
+        attributes: {
+            ...defaultSchema.attributes,
+            // defaultSchema only allows className on <a> with a fixed footnote
+            // value, so replace the allowlist to permit our "ansCitations"
+            // class plus target/rel for safe new-tab links.
+            a: ['href', 'className', 'target', 'rel'],
+        },
+    };
 
     if(sourcesIndex !== -1){ 
         // Extracts main answer
@@ -45,13 +58,14 @@ export default function Message({AIres, userQuery}){
 
     return(
         <div className="msgBody d-flex flex-column ">
-            <div className="inputQuery ">
+            {userQuery !== '' && 
+            <div className="inputQuery d-flex justify-content-end">
                 <p>{userQuery}</p>
-            </div>
+            </div>}
             
-            <div className="aiResponse">
+            <div className="aiResponse d-flex flex-column justify-content-start p-3">
                 <div className = "resAnswer">
-                    <ReactMarkdown>{answer}</ReactMarkdown>
+                    <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeSanitize, citationSchema]]}>{answer}</ReactMarkdown>
                 </div>
                 <div className = "resSources">
                     {sources.length > 0 ? <h5>Sources</h5> : null}
@@ -59,7 +73,7 @@ export default function Message({AIres, userQuery}){
                         return <a key={index} href={source.url} className='sourceLinks'>{source.name}</a>
                     })}
                 </div>
-                <div className = "resFollowUps">
+                <div className = "resFollowUps mt-3">
                     {followups.length > 0 ? <h5>Follow ups</h5> : null}
                     {followups?.map((followup, index)=>{
                         return <button key={index} className='followUpBtns'>{followup.question}</button>
