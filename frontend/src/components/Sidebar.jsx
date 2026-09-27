@@ -13,7 +13,7 @@ export default function Sidebar({flashMsg}) {
                     open ? "sidebar-open" : "sidebar-closed"
                 }`}
             >
-                <div className="d-flex flex-column h-100">
+                <div className="d-flex flex-column h-100 justify-content-between">
 
                     {/* Sidebar Header */}
                     <div className="d-flex align-items-center justify-content-between p-3">

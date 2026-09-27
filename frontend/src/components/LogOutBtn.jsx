@@ -6,7 +6,7 @@ const LogOutBtn = ({flashMsg}) => {
     const navigate = useNavigate();
   const logoutStyle ={
     width: '100%',
-    backgroundColor:'transparent'
+    // backgroundColor:'transparent'
   }
   const handleLogout = async ()=>{
     try{
@@ -23,8 +23,7 @@ const LogOutBtn = ({flashMsg}) => {
   }
   return (
     <div>
-        <hr />
-        <button type="button" className={`btn btn-secondary`} style={logoutStyle} onClick={handleLogout}>Log out</button>
+        <button type="button" className={`btn btn-danger mb-4`} style={logoutStyle} onClick={handleLogout}>Log out</button>
     </div>
   )
 }
