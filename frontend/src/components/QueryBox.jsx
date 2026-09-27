@@ -16,6 +16,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
 
     const endpoints = {
         local: '/api/conversation/onDevice',
+        cloud: '/api/conversation/'
     };
     const navigate = useNavigate();
     const handleSubmbit = async (event) => {
@@ -52,7 +53,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
     else if(selectModel !== '' && userQuery!==''){
         try{
             // GPT 5.6 Luna streaming
-            const result = await fetch(selectModel, {
+            const result = await fetch(endpoints.cloud, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
