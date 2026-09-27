@@ -63,7 +63,7 @@ export default function Message({AIres, userQuery}){
                 <p>{userQuery}</p>
             </div>}
             
-            <div className="aiResponse d-flex flex-column justify-content-start p-3">
+            <div className="aiResponse d-flex flex-column justify-content-start p-3 mb-3">
                 <div className = "resAnswer">
                     <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeSanitize, citationSchema]]}>{answer}</ReactMarkdown>
                 </div>

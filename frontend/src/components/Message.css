@@ -12,7 +12,4 @@
 }
 
 a{color: white}
-a:hover{
-    transform: scale(1.01);
-    transition: transform 0.3s ease-out;
-}
+a:hover{color: rgb(136, 200, 255);}
