@@ -10,7 +10,7 @@ const userSchema= new mongoose.Schema({
         type: String
     },
 
-    conversation: [{type: mongoose.Schema.Types.ObjectId, ref: 'conversation'}],
+    conversations: [{type: mongoose.Schema.Types.ObjectId, ref: 'conversation'}],
 });
 userSchema.plugin(
     passportLocalMongoose.default || passportLocalMongoose,

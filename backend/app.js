@@ -182,10 +182,13 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
   console.log("BODY:", req.body);
   console.log(`/conversation/${modelName}`);
   let newConversation={};
+  let newConv = false;
   console.log(req.body);
   let currConvId = '';
   let currConversation = {}
-  let currUser = req.session.passport.user;
+  let currUserName = req.session.passport.user;
+  let currUser = await user.findOne({email: currUserName});
+  console.log("Current User",currUser);
   if(req.body.conversationId === ''){
     newConversation = new conversation({
       conversationName: req.body.userQuery,
@@ -193,6 +196,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
     
     currConversation = await newConversation.save();
     currConvId = newConversation._id;
+    newConv = true;
     console.log('New conversation \n',currConversation);
   }
   else{
@@ -245,14 +249,30 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
               res.write(event.delta);
           }
         }
-        const newMessage = new messages({
-          userquery: userPrompt,
-          response: fullResponse,
-          model: modelName,
-        })
-        let savedMsg = await newMessage.save();
-        currConversation.messages = savedMsg;
-        let updatedConv = await currConversation.save();
+
+        if(newConv){
+          const newMessage = new messages({
+            userquery: userPrompt,
+            response: fullResponse,
+            model: modelName,
+          })
+          let savedMsg = await newMessage.save();
+          newConversation.messages = savedMsg;
+          let freshConv = await newConversation.save();
+          currUser.conversations.push(freshConv); 
+        }
+        else{
+          const newMessage = new messages({
+            userquery: userPrompt,
+            response: fullResponse,
+            model: modelName,
+          })
+          let savedMsg = await newMessage.save();
+          currConversation.messages = savedMsg;
+          let updatedConv = await currConversation.save();
+
+          
+        }
         console.log(updatedConv);
       } catch (error) {
         console.error("OpenAI request failed:", error.message);
