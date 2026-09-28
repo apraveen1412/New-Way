@@ -58,28 +58,31 @@ export default function Message({AIres, userQuery}){
 
     return(
         <div className="msgBody d-flex flex-column ">
-            {userQuery !== '' && 
-            <div className="inputQuery d-flex justify-content-end">
-                <p>{userQuery}</p>
-            </div>}
+            {userQuery?.trim() && (
+                <div className="inputQuery d-flex justify-content-end">
+                    <p>{userQuery}</p>
+                </div>
+            )}
             
-            <div className="aiResponse d-flex flex-column justify-content-start p-3 mb-3">
-                <div className = "resAnswer">
-                    <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeSanitize, citationSchema]]}>{answer}</ReactMarkdown>
+            {answer?.trim() && (
+                <div className="aiResponse d-flex flex-column justify-content-start p-3 mb-3">
+                    <div className = "resAnswer">
+                        <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeSanitize, citationSchema]]}>{answer}</ReactMarkdown>
+                    </div>
+                    <div className = "resSources">
+                        {sources.length > 0 ? <h5>Sources</h5> : null}
+                        {sources?.map((source, index)=>{
+                            return <a key={index} href={source.url} className='sourceLinks'>{source.name}</a>
+                        })}
+                    </div>
+                    <div className = "resFollowUps mt-3">
+                        {followups.length > 0 ? <h5>Follow ups</h5> : null}
+                        {followups?.map((followup, index)=>{
+                            return <button key={index} className='followUpBtns'>{followup.question}</button>
+                        })}
+                    </div>
                 </div>
-                <div className = "resSources">
-                    {sources.length > 0 ? <h5>Sources</h5> : null}
-                    {sources?.map((source, index)=>{
-                        return <a key={index} href={source.url} className='sourceLinks'>{source.name}</a>
-                    })}
-                </div>
-                <div className = "resFollowUps mt-3">
-                    {followups.length > 0 ? <h5>Follow ups</h5> : null}
-                    {followups?.map((followup, index)=>{
-                        return <button key={index} className='followUpBtns'>{followup.question}</button>
-                    })}
-                </div>
-            </div>
+            )}
         </div>
     );
 }
