@@ -117,7 +117,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: '0.5rem'
+        marginRight: '0.6rem'
     }
 
     function aiModel(model){

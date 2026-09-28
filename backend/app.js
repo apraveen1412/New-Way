@@ -161,7 +161,19 @@ app.get('/api/logout', (req, res, next) => {
   });
 });
 
-
+app.get('/api/conversation/', isLoggedIn, async(req, res, next)=>{
+  try{
+    const convId = req.body.conversationId;
+    const currConversations = await conversation.findById(convId);
+    res.send(currConversations);
+  }
+  catch(err){
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Internal server error'
+    })
+  }
+});
 app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
   const modelName = req.body.model;
   console.log(req.session.passport);
@@ -171,15 +183,24 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
   console.log(`/conversation/${modelName}`);
   let newConversation={};
   console.log(req.body);
+  let currConvId = '';
+  let currConversation = {}
   let currUser = req.session.passport.user;
   if(req.body.conversationId === ''){
     newConversation = new conversation({
       conversationName: req.body.userQuery,
-      // messages: req.body.messages,
     });
     
-    // newConversation.save();
+    currConversation = await newConversation.save();
+    currConvId = newConversation._id;
+    console.log('New conversation \n',currConversation);
   }
+  else{
+    currConvId = req.body.conversationId;
+    currConversation = await conversation.findById(currConvId);
+    console.log('Existing conversation \n',currConversation);
+  }
+   
   let userPrompt = req.body?.userQuery;
   try {
       let webResults = await webRes(userPrompt);
@@ -191,7 +212,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
           content: el.content
         }))
       );
-      const messages = [
+      const message = [
         { 
           role: "system", 
           content: master_prompt 
@@ -213,7 +234,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
         })
         const response = await client.responses.create({
             model: `${modelName}`,
-            input: messages,
+            input: message,
             stream: true,
         });
         let fullResponse = '';
@@ -224,6 +245,15 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
               res.write(event.delta);
           }
         }
+        const newMessage = new messages({
+          userquery: userPrompt,
+          response: fullResponse,
+          model: modelName,
+        })
+        let savedMsg = await newMessage.save();
+        currConversation.messages = savedMsg;
+        let updatedConv = await currConversation.save();
+        console.log(updatedConv);
       } catch (error) {
         console.error("OpenAI request failed:", error.message);
         if (error.cause) console.error("Cause:", error.cause);
