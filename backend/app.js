@@ -257,7 +257,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
             model: modelName,
           })
           let savedMsg = await newMessage.save();
-          newConversation.messages = savedMsg;
+          newConversation.messages.push(savedMsg);
           let freshConv = await newConversation.save();
           currUser.conversations.push(freshConv); 
         }
@@ -268,7 +268,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
             model: modelName,
           })
           let savedMsg = await newMessage.save();
-          currConversation.messages = savedMsg;
+          currConversation.messages.push(savedMsg);
           let updatedConv = await currConversation.save();
 
           
