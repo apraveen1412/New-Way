@@ -21,6 +21,7 @@ import { messages } from './models/messagesSchema.js';
 
 // Authentication
 import { isLoggedIn } from './middleware/authenticate.js';
+import HandleDB from './middleware/dbHandler.js';
 
 
 dotenv.config();
@@ -113,7 +114,7 @@ app.post('/api/auth/signup', async (req, res, next) => {
     }
 });
 
-app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
+app.post('/api/auth/signin', async(req, res, next) => { // Defining passport function
     let {username, password} = req.body;
     if(typeof username === 'string' && typeof password === 'string'){
       username = username.trim();
@@ -121,6 +122,8 @@ app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
       if (!username || !password) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
       }
+      let userObj = await user.findOne({email: username});
+      // console.log(userObj);
       passport.authenticate('local', (err, user, info) => {
         if (err) { // operational errors like DB failures, session failure and more
             return next(err);
@@ -137,7 +140,8 @@ app.post('/api/auth/signin', (req, res, next) => { // Defining passport function
             }
             res.status(200).json({
                 success: true,
-                message: 'Sign in successful'
+                message: 'Sign in successful',
+                user: userObj
             });
         });
 
@@ -181,29 +185,9 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
   console.log("MODEL:", modelName);
   console.log("BODY:", req.body);
   console.log(`/conversation/${modelName}`);
-  let newConversation={};
-  let newConv = false;
-  console.log(req.body);
-  let currConvId = '';
-  let currConversation = {}
+  
   let currUserName = req.session.passport.user;
-  let currUser = await user.findOne({email: currUserName});
-  console.log("Current User",currUser);
-  if(req.body.conversationId === ''){
-    newConversation = new conversation({
-      conversationName: req.body.userQuery,
-    });
-    
-    currConversation = await newConversation.save();
-    currConvId = newConversation._id;
-    newConv = true;
-    console.log('New conversation \n',currConversation);
-  }
-  else{
-    currConvId = req.body.conversationId;
-    currConversation = await conversation.findById(currConvId);
-    console.log('Existing conversation \n',currConversation);
-  }
+  let conversationId = req.body.conversationId;
    
   let userPrompt = req.body?.userQuery;
   try {
@@ -249,31 +233,6 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
               res.write(event.delta);
           }
         }
-
-        if(newConv){
-          const newMessage = new messages({
-            userquery: userPrompt,
-            response: fullResponse,
-            model: modelName,
-          })
-          let savedMsg = await newMessage.save();
-          newConversation.messages.push(savedMsg);
-          let freshConv = await newConversation.save();
-          currUser.conversations.push(freshConv); 
-        }
-        else{
-          const newMessage = new messages({
-            userquery: userPrompt,
-            response: fullResponse,
-            model: modelName,
-          })
-          let savedMsg = await newMessage.save();
-          currConversation.messages.push(savedMsg);
-          let updatedConv = await currConversation.save();
-
-          
-        }
-        console.log(updatedConv);
       } catch (error) {
         console.error("OpenAI request failed:", error.message);
         if (error.cause) console.error("Cause:", error.cause);
@@ -281,6 +240,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
           `Failed to get a response from the GPT 5.6 Luna. (${error.message})`
         );
       }
+      HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
         
       // Tells frontend that stream is finished
       res.end();
@@ -299,20 +259,15 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
 
 
 app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
-  console.log(req.session.user);
-  let newConversation={};
-  if(!req.body.conversationExist){
-    newConversation = new conversation({
-      conversationName: req.body.convName,
-      messages: req.body.messages,
-    });
-    newConversation.save();
-  }
   console.log('/conversation/onDevice');
+
+  let currUserName = req.session.passport.user;
+  let conversationId = req.body.conversationId;
+  console.log(currUserName);
+  // HandleDB(conversationId, currUserName);
   if(req.body.userQuery === '') return;
   console.log(req.body);
   let userPrompt = req.body?.userQuery;
   let webResults = await webRes(userPrompt);
   res.send(webResults);
 });
-

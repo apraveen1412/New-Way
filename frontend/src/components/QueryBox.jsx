@@ -37,7 +37,8 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
                 setLocalWebResults(result);
                 getUserQuery(userQuery);
 
-                onDeviceAI(userQuery, result, AIres);
+                let response = await onDeviceAI(userQuery, result, AIres);
+                console.log(response);
 
                 return;
             }
@@ -139,7 +140,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
             />
 
             <ModelSelection aiModel={aiModel}/>
-            {/* <input type="hidden" name="model" value={`${selectModel}`} required/> */}
             <input type="hidden" name="conversationId" />
             <button type="submit" id="qSubmit" className='qSubmit btn btn-primary' style={qSubmit}>
                 <i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i>

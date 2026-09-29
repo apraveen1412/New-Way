@@ -42,7 +42,7 @@ export async function onDeviceAI(userQuery, webResults, resStream){
   for await(let chunk of response)  {
     finalRes+=chunk;
     resStream(finalRes);
-    console.log(finalRes);
+    // console.log(finalRes);
   };
   
   let answer = "";
