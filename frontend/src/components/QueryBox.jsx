@@ -39,7 +39,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
         // Chrome built-in / on-device model
         if (selectModel === endpoints.local && userQuery!=='') {
             try{
-                const result = await axios.post(selectModel,{
+                const result = await axios.post(endpoints.local,{
                     userQuery: userQuery,
                     model: selectModel
                 });
