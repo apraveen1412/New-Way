@@ -16,7 +16,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
     async function saveBD(conversationId, userQuery, fullResponse, modelName){
         const result = await axios.post('/api/conversation/onDevice/db', {
             conversationId: conversationId,
-            userQuery: userQuery,
+            userPrompt: userQuery,
             fullResponse: fullResponse,
             modelName: selectModel
         });
