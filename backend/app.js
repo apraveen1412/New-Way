@@ -190,6 +190,7 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
   let conversationId = req.body.conversationId;
    
   let userPrompt = req.body?.userQuery;
+  let fullResponse = '';
   try {
       let webResults = await webRes(userPrompt);
       const structuredWebResults = JSON.stringify(
@@ -225,7 +226,6 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
             input: message,
             stream: true,
         });
-        let fullResponse = '';
         for await (const event of response){
           if(event.type === 'response.output_text.delta'){
               fullResponse += event.delta;
@@ -260,7 +260,6 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
 
 app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
   console.log('/conversation/onDevice');
-
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;
   console.log(currUserName);
@@ -270,4 +269,11 @@ app.post('/api/conversation/onDevice',isLoggedIn, async(req, res, next)=>{
   let userPrompt = req.body?.userQuery;
   let webResults = await webRes(userPrompt);
   res.send(webResults);
+});
+
+app.post('/api/conversation/onDevice/db',isLoggedIn, async(req, res, next)=>{
+  const{conversationId, userPrompt, fullResponse, modelName} = req.body;
+  let currUserName = req.session.passport.user;
+  HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
+  res.send('done');
 });

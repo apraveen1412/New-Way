@@ -27,6 +27,3 @@ export default function ModelSelection({aiModel}) {
         </div>
     );
 }
-
-// ()=>aiModel(Local_Endpoint)
-// gpt-5.6-sol

@@ -12,7 +12,16 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
     let [conversationId, setConversationId] = useState('');
-    
+
+    async function saveBD(conversationId, userQuery, fullResponse, modelName){
+        const result = await axios.post('/api/conversation/onDevice/db', {
+            conversationId: conversationId,
+            userQuery: userQuery,
+            fullResponse: fullResponse,
+            modelName: selectModel
+        });
+        console.log('DB Result: ', result);
+    }
 
     const endpoints = {
         local: '/api/conversation/onDevice',
@@ -39,6 +48,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
 
                 let response = await onDeviceAI(userQuery, result, AIres);
                 console.log('Response: ',response);
+                saveBD(conversationId, userQuery, response, selectModel);
 
                 return;
             }
@@ -90,7 +100,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
                 
                     AIres(answer);
                 
-                    console.log("Received:", chunk);
+                    // console.log("Received:", chunk);
                 }
             
                 // Process any remaining decoder data
