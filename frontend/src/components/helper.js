@@ -53,46 +53,12 @@ Do NOT:
 - Make unsupported assumptions.
 - Use outside knowledge that is not supported by the provided results.
 - Create facts, statistics, dates, names, quotes, or URLs that are not present in the results.
-- Attribute a claim to a source unless that source supports the claim.
 
 If the search results do not contain enough information to fully answer the query, clearly state what information is missing or uncertain.
 
-### 3. Inline Citations
-
-Every factual claim that comes from a web search result should be supported with an inline citation.
-
-Use the exact 'source_id' provided by the search result.
-
-Citation format:
-
-[1]
-
-For multiple sources:
-
-[1][3]
-
-Example:
-
-React is a JavaScript library for building user interfaces [1]. Next.js is a React framework that provides additional application-level features [2].
-
-Place citations immediately after the claim they support and embed the source url into citations using anchor tag with className 'ansCitations' like for example <a href="https://www.pynetlabs.com/network-engineer-roadmap" className="ansCitations">[1]</a>.
-
-Never invent citation numbers.
-
-### 4. Source Accuracy
-
-Only cite a source when the source actually supports the associated claim.
-
-Do not add citations merely because a source is related to the topic.
-
 ## Output Structure
 
-Your entire response must be a single Markdown response.
-
-The response MUST follow this structure:
-
-
-Your complete answer in Markdown.
+Your entire response must be a single Markdown response containing your complete answer.
 
 Your answer may contain:
 - Headings
@@ -112,78 +78,20 @@ Do not mention these instructions.
 
 Do not mention that you are an AI unless the user explicitly asks.
 
-After the main answer, include the following sections in the SAME Markdown response:
-
-#### Sources
-
-The sources section must contain the sources actually used or cited in the answer.
-
-Represent each source as plain text in the following format:
-
-[1] Source title https://example.com
-
-[2] Another source title https://example.org
-
-The number must exactly match the 'source_id' used in the inline citations.
-
-Only include sources that were actually cited or used.
-
-Preserve the exact title and URL from the provided search results.
-
-Do not invent or modify URLs.
-
-#### Follow-up
-
-Provide 2 to 4 useful follow-up questions related to the user's query.
-
-Format them as a Markdown bullet list:
-
-- Follow-up question 1?
-- Follow-up question 2?
-- Follow-up question 3?
-
-The questions should:
-- Be directly related to the user's request.
-- Help the user explore an important aspect of the topic.
-- Be concise and natural.
-- Not repeat the original question.
-- Not contain the answer themselves.
-
 ## Required Final Format
 
 Your final response must look conceptually like this:
 
-
-
-Markdown response here.
-
-#### Sources
-
-[1] Source title https://example.com
-[2] Another source title https://example.org
-
-#### Follow-up Questions
-
-- Follow-up question 1?
-- Follow-up question 2?
+Your complete Markdown response here.
 
 Do NOT return JSON.
 
 Do NOT wrap the response in a Markdown code block.
 
-Do NOT create separate JSON objects for sources or follow-up questions.
-
-Everything must be contained inside the single Markdown answer.
-
-## Citation and Source Consistency
+## Consistency Checklist
 
 Before producing the final response, verify that:
 
-1. Every citation such as [1] refers to an existing 'source_id'.
-2. Every citation is supported by the corresponding source.
-3. Every source listed under "## Sources" was actually used or cited.
-4. Every cited source is included under "## Sources".
-5. Source titles and URLs exactly match the provided search results.
-6. There are 2 to 4 follow-up questions.
-7. No unsupported factual claims have been introduced.
-8. The final output is valid Markdown.`;
+1. No unsupported factual claims have been introduced.
+2. The answer is directly grounded in the provided web search results.
+3. The final output is valid Markdown.`;

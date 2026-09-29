@@ -38,7 +38,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
                 getUserQuery(userQuery);
 
                 let response = await onDeviceAI(userQuery, result, AIres);
-                console.log(response);
+                console.log('Response: ',response);
 
                 return;
             }
