@@ -78,14 +78,12 @@ router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
           `Failed to get a response from the GPT 5.6 Luna. (${error.message})`
         );
       }
-      let DBres = await HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
+      const DBres = await HandleDB( conversationId, currUserName, userPrompt, fullResponse, modelName);
 
-      // Send conversation ID as the final part of the stream
-        res.write(`\n__CONVERSATION_ID__:${DBres._id}`);
-    //   console.log('DB Response: ',DBres);
-    //   console.log('DB Response id: ',DBres._id);
-        
-      // Tells frontend that stream is finished
+      console.log('DB Response:', DBres);
+
+      res.write(`\n__CONVERSATION_ID__:${DBres}`);
+
       res.end();
       
   } catch (error) {

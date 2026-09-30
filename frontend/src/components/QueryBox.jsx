@@ -35,7 +35,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
     const handleSubmbit = async (event) => {
         event.preventDefault();
         if (!userQuery.trim()) return;
-
+        getUserQuery(userQuery);
         // console.log("selectModel:", selectModel);
         // console.log("userQuery:", userQuery);
         let answer = "";
@@ -43,7 +43,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
         // Chrome built-in / on-device model
         if (selectModel === endpoints.local && userQuery!=='') {
             try{
-                getUserQuery(userQuery);
                 const result = await axios.post(endpoints.local,{
                     userQuery: userQuery,
                     model: selectModel
@@ -91,8 +90,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 const reader = result.body.getReader();
                 const decoder = new TextDecoder();
             
-                getUserQuery(userQuery);
-            
                 while (true) {
                     const { value, done } = await reader.read();
                     if (done) break;
@@ -109,21 +106,16 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 const markerIndex = answer.indexOf(marker);
 
                 if (markerIndex !== -1) {
-                    const newConversationId = answer
-                        .substring(markerIndex + marker.length)
-                        .trim();
+                    const newConversationId = answer.substring(markerIndex + marker.length).trim();
                 
-                    // console.log('New conversation ID:', newConversationId);
+                    console.log('New conversation ID:', newConversationId);
                 
-                    // Store it for the next message
                     setConversationId(newConversationId);
                 
-                    // Remove the ID from the displayed AI response
                     answer = answer.substring(0, markerIndex).trim();
                 
                     AIres(answer);
                 }
-
                 // console.log("Final answer:", answer);
                 setUserQuery("");
             }
