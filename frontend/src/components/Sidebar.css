@@ -43,7 +43,23 @@
     border: none;
 }
 
-.button-bg{
-    transition: 0.2s ease-out;
-    background-color: #6c757d;
+.conversation-btn {
+    text-align: left !important;
+    color: white !important;
+    border: none !important;
+    background-color: transparent !important;
+    transition: background-color 0.2s ease;
+}
+
+.conversation-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.conversation-btn.conversation-active {
+    background-color: #495057 !important;
+    color: white !important;
+}
+
+.conversation-btn.conversation-active:hover {
+    background-color: #495057 !important;
 }

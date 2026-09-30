@@ -5,22 +5,14 @@ import axios from 'axios';
 
 export default function Sidebar({flashMsg, conversations, setConversationId, setGetMessages}) {
     const [open, setOpen] = useState(true);
-    const [isClicked, setIsClicked] = useState(false);
+    const [selectedConversation, setSelectedConversation] = useState(null);
     console.log('sidebar: ',conversations);
     // #6c757d
     const handleChat = async (e)=>{
-        console.log(e.target.id);
-        setConversationId(e.target.id);
-        setIsClicked(!isClicked);
-        let getConversation = {}
-        for(let i = 0; i<conversations.length; i++){
-            if(conversations[i]._id === e.target.id){
-                getConversation = conversations[i];
-            }
-        }
-        console.log(getConversation);
-        const getConvMsgs = await axios.get(`./api/conversation/${getConversation._id}`);
-        console.log(getConvMsgs);
+        const conversationId = e.currentTarget.id;
+        setConversationId(conversationId);
+        setSelectedConversation(conversationId);
+        const getConvMsgs = await axios.get(`/api/conversation/${conversationId}`);
         setGetMessages(getConvMsgs.data);
     }
 
@@ -51,7 +43,8 @@ export default function Sidebar({flashMsg, conversations, setConversationId, set
                                 <ul className="conversationHistory p-0">
                                     {conversations?.map((conv) => (
                                         <li key={conv._id} >
-                                            <button className={`conversation-btn btn btn-outline-secondary m-0 mt-1 mb-1 w-100 ${isClicked ? "button-bg" : ''}`} id={conv._id} onClick={handleChat}>
+                                            <button
+                                                className={`conversation-btn btn m-0 mt-1 mb-1 w-100 ${selectedConversation === conv._id ? 'conversation-active' : '' }`} id={conv._id} onClick={handleChat}>
                                                 {conv.conversationName}
                                             </button>
                                         </li>
