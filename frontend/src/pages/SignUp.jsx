@@ -29,15 +29,15 @@ export default function SignUp({flashMsg}){
                 <h3 className='align-self-center m-0 mb-1'>Sign Up</h3>
                 <div className="form-group w-100">
                   <label htmlFor="username">Enter your name</label>
-                  <input type="text" className="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter username" />
+                  <input type="text" className="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter username" required/>
                 </div>
                 <div className="form-group w-100">
                   <label htmlFor="email">Email address</label>
-                  <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
+                  <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required/>
                 </div>
                 <div className="form-group w-100">
                   <label htmlFor="password">Password</label>
-                  <input type="password" className="form-control" id="password" placeholder="Password" />
+                  <input type="password" className="form-control" id="password" placeholder="Password" required/>
                 </div>
               </div>
               

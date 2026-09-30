@@ -8,12 +8,16 @@ import {user} from '../models/userSchema.js';
 // Authentication
 import { isLoggedIn } from '../middleware/authenticate.js';
 
+// Validation
+import { signUpSchema, signInSchema } from '../middleware/joiValidation.js';
+import { validate } from '../middleware/validate.js';
+
 
 
 const router = express.Router();
 
 // .('/api/auth')
-router.post('/signup', async (req, res, next) => {
+router.post('/signup',validate(signUpSchema), async (req, res, next) => {
         try {
             let { name, email, password } = req.body;
             if(typeof name === 'string' && typeof email === 'string' && typeof password === 'string'){
@@ -51,7 +55,7 @@ router.post('/signup', async (req, res, next) => {
         }
     })
 
-router.post('/signin', async(req, res, next) => { // Defining passport function
+router.post('/signin',validate(signInSchema), async(req, res, next) => { // Defining passport function
         let {username, password} = req.body;
         if(typeof username === 'string' && typeof password === 'string'){
           username = username.trim();

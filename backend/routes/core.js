@@ -3,28 +3,20 @@ import OpenAI from 'openai';
 
 import {webRes, master_prompt} from '../helper.js';
 
-
-
-
-// DB models
-import {user} from '../models/userSchema.js';
-import  { conversation } from '../models/conversationSchema.js';
-import { messages } from '../models/messagesSchema.js';
-
 // Authentication
 import { isLoggedIn } from '../middleware/authenticate.js';
 import HandleDB from '../middleware/dbHandler.js';
 
-
+// Validation
+import { modelSchema } from '../middleware/joiValidation.js';
+import { validate } from '../middleware/validate.js';
 
 
 const router = express.Router();
 
 
-
-
 // cloud response
-router.post('/', isLoggedIn, async(req, res, next)=>{
+router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
   const modelName = req.body.model;
   console.log(req.session.passport);
   console.log(req.user);
@@ -109,7 +101,7 @@ router.post('/', isLoggedIn, async(req, res, next)=>{
 });
 
 // local response
-router.post('/onDevice',isLoggedIn, async(req, res, next)=>{
+router.post('/onDevice',isLoggedIn, validate(modelSchema), async(req, res, next)=>{
   console.log('/conversation/onDevice');
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;
