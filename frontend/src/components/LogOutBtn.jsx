@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 const LogOutBtn = ({flashMsg}) => {
     const navigate = useNavigate();
   const logoutStyle ={
-    width: '100%',
+    width: '26vw',
     // backgroundColor:'transparent'
   }
   const handleLogout = async ()=>{
@@ -22,7 +22,7 @@ const LogOutBtn = ({flashMsg}) => {
     }
   }
   return (
-    <div>
+    <div className='d-flex flex-column align-self-center'>
         <button type="button" className={`btn btn-danger mb-4`} style={logoutStyle} onClick={handleLogout}>Log out</button>
     </div>
   )

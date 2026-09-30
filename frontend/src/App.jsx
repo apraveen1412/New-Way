@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path='/' element={<SignIn flashMsg={setFlashMsg} setUser={setUser}/>}/>
         <Route path='/sign-up' element={<SignUp flashMsg={setFlashMsg} setUser={setUser}/>}/>
-        <Route path='/home' element={<NewWay flashMsg={setFlashMsg} currentUser={user}/>}/>
+        <Route path='/home' element={<NewWay flashMsg={setFlashMsg} currentUser={user} setUser={setUser} />}/>
         <Route path='*' element={<NotFound/>}/>
       </Routes>
     </>

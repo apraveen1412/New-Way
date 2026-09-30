@@ -1,14 +1,25 @@
 import './Sidebar.css';
 import { useState } from "react";
 import LogOutBtn from './LogOutBtn'
+import axios from 'axios';
 
-export default function Sidebar({flashMsg, conversations}) {
+export default function Sidebar({flashMsg, conversations, setConversationId, setGetMessages}) {
     const [open, setOpen] = useState(true);
     console.log('sidebar: ',conversations);
     // #6c757d
-    const handleChat = (e)=>{
-        console.log(e);
-
+    const handleChat = async (e)=>{
+        console.log(e.target.id);
+        setConversationId(e.target.id);
+        let getConversation = {}
+        for(let i = 0; i<conversations.length; i++){
+            if(conversations[i]._id === e.target.id){
+                getConversation = conversations[i];
+            }
+        }
+        console.log(getConversation);
+        const getConvMsgs = await axios.get(`./api/conversation/${getConversation._id}`);
+        console.log(getConvMsgs);
+        setGetMessages(getConvMsgs.data);
     }
 
     return (
@@ -33,7 +44,7 @@ export default function Sidebar({flashMsg, conversations}) {
                                     <i className="fa-solid fa-plus me-2"></i>New Chat</button>
                                 <p className='m-0 mt-2'>Chats</p>
                                 <ul className="conversationHistory p-0">
-                                    {conversations.map((conv) => (
+                                    {conversations?.map((conv) => (
                                         <li key={conv._id} >
                                             <button className="conversation-btn btn btn-outline-secondary m-0 mt-1 mb-1 w-100" id={conv._id} onClick={handleChat}>
                                                 {conv.conversationName}

@@ -141,6 +141,7 @@ app.post('/api/auth/signin', async(req, res, next) => { // Defining passport fun
             if (err) {
                 return next(err);
             }
+            // res.cookie('user', userObj);
             res.status(200).json({
                 success: true,
                 message: 'Sign in successful',
@@ -153,6 +154,14 @@ app.post('/api/auth/signin', async(req, res, next) => { // Defining passport fun
     else{
       return res.status(400).json({ success: false, message: 'Invalid email or password' });
     }
+});
+
+app.get('/api/auth/me', isLoggedIn, async (req, res, next)=>{
+  const currUser = req.session.passport.user;
+  const userObj = await user.findOne({email: currUser}).populate({
+    path: 'conversations'
+  });
+  res.send(userObj);
 });
 
 app.get('/api/logout', (req, res, next) => {
@@ -280,4 +289,15 @@ app.post('/api/conversation/onDevice/db',isLoggedIn, async(req, res, next)=>{
   let currUserName = req.session.passport.user;
   HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
   res.send('done');
+});
+
+app.get('/api/conversation/:id', isLoggedIn, async(req, res, next)=>{
+  
+  // res.send('This is messages');
+  const fetchConv = await conversation.findById(req.params.id).populate({
+    path: 'messages'
+  });
+  const convMsgs = fetchConv.messages;
+  res.send(convMsgs);
+
 });

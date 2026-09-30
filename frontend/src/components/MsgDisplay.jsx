@@ -1,0 +1,88 @@
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import './Message.css'
+
+export default function MsgDisplay({msg}){
+    let answer = ''; 
+    let sources = []; 
+    let followups = [];
+    
+    const sourceMarker = '#### Sources';
+    const followUpMarker = '#### Follow-up';
+    let sourcesIndex = msg.response.indexOf(sourceMarker);
+    let followUpIndex = msg.response.indexOf(followUpMarker);
+    const citationSchema = {
+        ...defaultSchema,
+        attributes: {
+            ...defaultSchema.attributes,
+            // defaultSchema only allows className on <a> with a fixed footnote
+            // value, so replace the allowlist to permit our "ansCitations"
+            // class plus target/rel for safe new-tab links.
+            a: ['href', 'className', 'target', 'rel'],
+        },
+    };
+
+    if(sourcesIndex !== -1){ 
+        // Extracts main answer
+        answer = msg.response.slice(0, sourcesIndex).trim();
+
+        // Extract sources
+        const sourceEnd = followUpIndex !== -1 ? followUpIndex : msg.response.length;
+        const sourceText = msg.response.slice(sourcesIndex + sourceMarker.length, sourceEnd);
+
+        sources = sourceText
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line.includes('http'))
+            .map(line => {
+                const httpIndex = line.indexOf('http');
+                return({
+                    name:line.slice(0, httpIndex).trim(),
+                    url: line.slice(httpIndex).trim(),
+                });
+            })
+
+        // Extract follow ups
+        const followUpText = msg.response.slice((followUpIndex + followUpMarker.length)+1); 
+        followups = followUpText.split('\n').map(line => line.trim()).filter(line => line.startsWith('-')).map(line => {
+            line = line.replace(/^-\\s*/, '').trim();
+            return({question: line});
+        });
+
+    } else {
+        answer = msg.response.trim() || '';
+        sources = Array.isArray(msg.response.sources) ? msg.response.sources : [];
+        followups = Array.isArray(msg.response.followUps) ? msg.response.followUps : [];
+    }
+
+    return(
+        <div className="msgBody d-flex flex-column ">
+            {msg.userquery?.trim() && (
+                <div className="inputQuery d-flex justify-content-end">
+                    <p>{msg.userquery}</p>
+                </div>
+            )}
+            
+            {answer?.trim() && (
+                <div className="aiResponse d-flex flex-column justify-content-start p-3 mb-3">
+                    <div className = "resAnswer">
+                        <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeSanitize, citationSchema]]}>{answer}</ReactMarkdown>
+                    </div>
+                    <div className = "resSources">
+                        {sources.length > 0 ? <h5>Sources</h5> : null}
+                        {sources?.map((source, index)=>{
+                            return <a key={index} href={source.url} className='sourceLinks'>{source.name}</a>
+                        })}
+                    </div>
+                    <div className = "resFollowUps mt-3">
+                        {followups.length > 0 ? <h5>Follow ups</h5> : null}
+                        {followups?.map((followup, index)=>{
+                            return <button key={index} className='followUpBtns'>{followup.question}</button>
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

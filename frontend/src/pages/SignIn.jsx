@@ -15,7 +15,8 @@ export default function SignIn({flashMsg, setUser}){
     };
     try{
       const msg = await axios.post('/api/auth/signin', data);
-      console.log(msg.data.user);
+      console.log("LOGIN USER:", msg.data.user);
+      // console.log(document.cookie);
       setUser(msg.data.user);
       flashMsg(msg.data);
       navigate('/home');

@@ -7,11 +7,10 @@ import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
 import { webRes } from './helper';
 
-export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg}){
+export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId}){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
-    let [conversationId, setConversationId] = useState('');
 
     async function saveBD(conversationId, userQuery, fullResponse, modelName){
         const result = await axios.post('/api/conversation/onDevice/db', {
