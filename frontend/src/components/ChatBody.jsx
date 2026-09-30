@@ -8,7 +8,7 @@ export default function ChatBody({AIres, userQuery,getMessages}){
         <div className = 'resBody'>
             {getMessages?.length > 0 && (
                 getMessages?.map((msg)=>{
-                   return <MsgDisplay msg={msg} />
+                   return <MsgDisplay msg={msg} key={msg._id}/>
                 })
             )}
             <Message AIres={AIres} userQuery={userQuery} />

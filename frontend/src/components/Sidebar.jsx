@@ -1,15 +1,17 @@
 import './Sidebar.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LogOutBtn from './LogOutBtn'
 import axios from 'axios';
 
 export default function Sidebar({flashMsg, conversations, setConversationId, setGetMessages}) {
     const [open, setOpen] = useState(true);
+    const [isClicked, setIsClicked] = useState(false);
     console.log('sidebar: ',conversations);
     // #6c757d
     const handleChat = async (e)=>{
         console.log(e.target.id);
         setConversationId(e.target.id);
+        setIsClicked(!isClicked);
         let getConversation = {}
         for(let i = 0; i<conversations.length; i++){
             if(conversations[i]._id === e.target.id){
@@ -22,6 +24,9 @@ export default function Sidebar({flashMsg, conversations, setConversationId, set
         setGetMessages(getConvMsgs.data);
     }
 
+    const handleNewChat = (e)=>{
+        window.location.reload();
+    }
     return (
         <>
             {/* Sidebar */}
@@ -40,13 +45,13 @@ export default function Sidebar({flashMsg, conversations, setConversationId, set
                         {/* Sidebar Content */}
                         {open && (
                             <div className="px-3 ">
-                                <button className="btn btn-outline-light w-100 mb-2">
+                                <button className="btn btn-outline-light w-100 mb-2" onClick={handleNewChat}>
                                     <i className="fa-solid fa-plus me-2"></i>New Chat</button>
                                 <p className='m-0 mt-2'>Chats</p>
                                 <ul className="conversationHistory p-0">
                                     {conversations?.map((conv) => (
                                         <li key={conv._id} >
-                                            <button className="conversation-btn btn btn-outline-secondary m-0 mt-1 mb-1 w-100" id={conv._id} onClick={handleChat}>
+                                            <button className={`conversation-btn btn btn-outline-secondary m-0 mt-1 mb-1 w-100 ${isClicked ? "button-bg" : ''}`} id={conv._id} onClick={handleChat}>
                                                 {conv.conversationName}
                                             </button>
                                         </li>

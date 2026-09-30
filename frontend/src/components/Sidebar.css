@@ -42,3 +42,8 @@
     color: white;
     border: none;
 }
+
+.button-bg{
+    transition: 0.2s ease-out;
+    background-color: #6c757d;
+}
