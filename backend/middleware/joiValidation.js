@@ -12,7 +12,7 @@ export const signInSchema = Joi.object({
 });
 
 export const modelSchema = Joi.object({
-    userquery: Joi.string().min(1).required(),
+    userQuery: Joi.string().min(1).required(),
     model: Joi.string().required(),
     conversationId: Joi.string().allow('').required()
 });
