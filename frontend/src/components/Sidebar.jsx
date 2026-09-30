@@ -17,7 +17,9 @@ export default function Sidebar({flashMsg, conversations, setConversationId, set
     }
 
     const handleNewChat = (e)=>{
-        window.location.reload();
+        setConversationId('');
+        setGetMessages([]);
+        setSelectedConversation(null);
     }
     return (
         <>
