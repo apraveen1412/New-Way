@@ -2,6 +2,11 @@ import {user} from '../models/userSchema.js';
 import  { conversation } from '../models/conversationSchema.js';
 import { messages } from '../models/messagesSchema.js';
 
+function convNamer(userPrompt){
+  const newConversation = userPrompt.replace(/can you|what is|how to/gi, '').trim();
+  if(!newConversation) return 'New Conversation';
+  return newConversation;
+}
 
 const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, modelName)=>{
   let newConversation={};
@@ -10,9 +15,10 @@ const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, 
   let currConversation = {}
   let currUser = await user.findOne({email: currUserName});
   console.log("Current User",currUser);
+  let conversationName = convNamer(userPrompt);
   if(conversationId === ''){
     newConversation = new conversation({
-      conversationName: userPrompt,
+      conversationName: conversationName,
     });
     
     currConversation = await newConversation.save();
@@ -36,6 +42,7 @@ const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, 
     newConversation.messages.push(savedMsg);
     let freshConv = await newConversation.save();
     currUser.conversations.push(freshConv); 
+    await currUser.save();
   }
   else{
     const newMessage = new messages({
@@ -48,6 +55,10 @@ const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, 
     let updatedConv = await currConversation.save();
     
   }
+  if(Object.keys(newConversation).length !== 0 ){
+    return newConversation._id;
+  }
+  else return currConvId;
 }
 
 export default HandleDB;

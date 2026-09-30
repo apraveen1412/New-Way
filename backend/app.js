@@ -122,7 +122,10 @@ app.post('/api/auth/signin', async(req, res, next) => { // Defining passport fun
       if (!username || !password) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
       }
-      let userObj = await user.findOne({email: username});
+      let userObj = await user.findOne({email: username}).populate({
+        path: 'conversations',
+        select: '_id conversationName'
+      });;
       // console.log(userObj);
       passport.authenticate('local', (err, user, info) => {
         if (err) { // operational errors like DB failures, session failure and more
@@ -240,10 +243,11 @@ app.post('/api/conversation/', isLoggedIn, async(req, res, next)=>{
           `Failed to get a response from the GPT 5.6 Luna. (${error.message})`
         );
       }
-      HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
+      let DBres = await HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
+      console.log('DB Response: ',DBres);
         
       // Tells frontend that stream is finished
-      res.end();
+      res.json({conversationId: DBres}).end();
       
   } catch (error) {
       console.error("/conversation failed:", error.message);

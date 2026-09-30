@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import './SignIn.css';
 
-export default function SignIn({flashMsg}){
+export default function SignIn({flashMsg, setUser}){
   let[err, setErr]=useState(null);
   const navigate = useNavigate();  
   const handleSignIn = async (e)=>{
@@ -15,7 +15,8 @@ export default function SignIn({flashMsg}){
     };
     try{
       const msg = await axios.post('/api/auth/signin', data);
-      console.log(msg);
+      console.log(msg.data.user);
+      setUser(msg.data.user);
       flashMsg(msg.data);
       navigate('/home');
     }  

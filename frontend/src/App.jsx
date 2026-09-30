@@ -13,14 +13,16 @@ function App() {
     success: false,
     message: ''
   });
+  let [user, setUser] = useState({});
+  console.log('app user: ', user);
   
   return (
     <>
       <FlashMsg flashMsg={flashMsg} setFlashMsg={setFlashMsg}/>
       <Routes>
-        <Route path='/' element={<SignIn flashMsg={setFlashMsg}/>}/>
-        <Route path='/sign-up' element={<SignUp flashMsg={setFlashMsg}/>}/>
-        <Route path='/home' element={<NewWay flashMsg={setFlashMsg}/>}/>
+        <Route path='/' element={<SignIn flashMsg={setFlashMsg} setUser={setUser}/>}/>
+        <Route path='/sign-up' element={<SignUp flashMsg={setFlashMsg} setUser={setUser}/>}/>
+        <Route path='/home' element={<NewWay flashMsg={setFlashMsg} currentUser={user}/>}/>
         <Route path='*' element={<NotFound/>}/>
       </Routes>
     </>

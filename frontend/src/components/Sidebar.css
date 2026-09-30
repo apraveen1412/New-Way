@@ -31,3 +31,14 @@
 .content-sidebar-closed {
     margin-left: 70px;
 }
+
+
+.conversationHistory li{
+    list-style: none;
+}
+
+.conversationHistory li button{
+    text-align: left !important;
+    color: white;
+    border: none;
+}
