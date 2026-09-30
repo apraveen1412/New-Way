@@ -8,7 +8,7 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
     const [open, setOpen] = useState(true);
     const [selectedConversation, setSelectedConversation] = useState(null);
     const navigate = useNavigate();
-    console.log('sidebar: ',conversations);
+    // console.log('sidebar: ',conversations);
     // #6c757d
     const handleChat = async (e)=>{
         const conversationId = e.currentTarget.id;

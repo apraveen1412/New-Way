@@ -18,7 +18,7 @@ router.post('/onDevice', isLoggedIn, async (req, res, next) => {
         const currUserName = req.session.passport.user;
         const DBres = await HandleDB( conversationId, currUserName, userPrompt, fullResponse, modelName);
 
-        console.log('Local DB Response:', DBres);
+        // console.log('Local DB Response:', DBres);
 
         // Send conversation ID back to frontend
         res.json({

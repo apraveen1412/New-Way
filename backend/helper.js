@@ -8,7 +8,7 @@ const tvly = tavily({ apiKey: process.env.TAVILY_API_KEY });
 export async function webRes(userQuery){
 
     try {
-      console.log('From webRes search query: ',userQuery);
+      // console.log('From webRes search query: ',userQuery);
     // Execute the search
     const response = await tvly.search(userQuery, {
       searchDepth: "basic", // "basic" is faster, "advanced" scrapes deeper

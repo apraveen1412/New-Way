@@ -14,7 +14,7 @@ function App() {
     message: ''
   });
   let [user, setUser] = useState({});
-  console.log('app user: ', user);
+  // console.log('app user: ', user);
   
   return (
     <>

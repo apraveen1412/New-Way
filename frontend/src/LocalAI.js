@@ -1,8 +1,8 @@
 import { master_prompt } from "./components/helper";
 
 export async function onDeviceAI(userQuery, webResults, resStream){
-  console.log("AI model loaded");
-  console.log(webResults);
+  // console.log("AI model loaded");
+  // console.log(webResults);
   const session = await LanguageModel.create({
     expectedInputs: [
       { type: "text", languages: ["en"] } 
@@ -15,7 +15,7 @@ export async function onDeviceAI(userQuery, webResults, resStream){
     
   // console.log(webResults);
   
-  console.log('Generating reply...');
+  // console.log('Generating reply...');
   let structuredWebResults = JSON.stringify(
     webResults?.data?.raw.map((el, index) => ({
       source_id: index + 1,
@@ -24,7 +24,7 @@ export async function onDeviceAI(userQuery, webResults, resStream){
       content: el.content
     }))
   );
-  console.log('webResults: ',webResults)
+  // console.log('webResults: ',webResults)
   // console.log('structuredWebResults: ',structuredWebResults);
   const messages = [
     { 

@@ -16,13 +16,12 @@ export default function SignIn({flashMsg, setUser}){
     try{
       const msg = await axios.post('/api/auth/signin', data);
       console.log("LOGIN USER:", msg.data.user);
-      // console.log(document.cookie);
       setUser(msg.data.user);
       flashMsg(msg.data);
       navigate('/home');
     }  
     catch(err){
-      console.log(err.response?.data);
+      // console.log(err.response?.data);
       flashMsg({
         success: false,
         message: err.response?.data?.message || 'Sign in failed'

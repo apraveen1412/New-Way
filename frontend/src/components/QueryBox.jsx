@@ -19,11 +19,11 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             fullResponse: fullResponse,
             modelName: modelName
         });
-        console.log('DB Result:', result.data);
+        // console.log('DB Result:', result.data);
         // Store the conversation ID
         if (result.data.conversationId) {
             setConversationId(result.data.conversationId);
-            console.log('Conversation ID:', result.data.conversationId);
+            // console.log('Conversation ID:', result.data.conversationId);
         }
     }
 
@@ -36,22 +36,22 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
         event.preventDefault();
         if (!userQuery.trim()) return;
 
-        console.log("selectModel:", selectModel);
-        console.log("userQuery:", userQuery);
+        // console.log("selectModel:", selectModel);
+        // console.log("userQuery:", userQuery);
         let answer = "";
 
         // Chrome built-in / on-device model
         if (selectModel === endpoints.local && userQuery!=='') {
             try{
+                getUserQuery(userQuery);
                 const result = await axios.post(endpoints.local,{
                     userQuery: userQuery,
                     model: selectModel
                 });
                 setLocalWebResults(result);
-                getUserQuery(userQuery);
 
                 let response = await onDeviceAI(userQuery, result, AIres);
-                console.log('Response: ',response);
+                // console.log('Response: ',response);
                 await saveBD(conversationId, userQuery, response, selectModel);
                 setRefreshUser(prev => !prev);
                 return;
@@ -113,7 +113,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                         .substring(markerIndex + marker.length)
                         .trim();
                 
-                    console.log('New conversation ID:', newConversationId);
+                    // console.log('New conversation ID:', newConversationId);
                 
                     // Store it for the next message
                     setConversationId(newConversationId);
@@ -124,11 +124,11 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                     AIres(answer);
                 }
 
-                console.log("Final answer:", answer);
+                // console.log("Final answer:", answer);
                 setUserQuery("");
             }
             catch(err){
-                console.log(err);
+                // console.log(err);
                 navigate('/');
                 flashMsg({
                   success: false,

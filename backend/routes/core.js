@@ -18,11 +18,11 @@ const router = express.Router();
 // cloud response
 router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
   const modelName = req.body.model;
-  console.log(req.session.passport);
-  console.log(req.user);
-  console.log("MODEL:", modelName);
-  console.log("BODY:", req.body);
-  console.log(`/conversation/${modelName}`);
+//   console.log(req.session.passport);
+//   console.log(req.user);
+//   console.log("MODEL:", modelName);
+//   console.log("BODY:", req.body);
+//   console.log(`/conversation/${modelName}`);
   
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;
@@ -82,14 +82,14 @@ router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
 
       // Send conversation ID as the final part of the stream
         res.write(`\n__CONVERSATION_ID__:${DBres._id}`);
-      console.log('DB Response: ',DBres);
-      console.log('DB Response id: ',DBres._id);
+    //   console.log('DB Response: ',DBres);
+    //   console.log('DB Response id: ',DBres._id);
         
       // Tells frontend that stream is finished
       res.end();
       
   } catch (error) {
-      console.error("/conversation failed:", error.message);
+    //   console.error("/conversation failed:", error.message);
       if (!res.headersSent) {
           res.status(500).json({
               error: error.message
@@ -102,13 +102,13 @@ router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
 
 // local response
 router.post('/onDevice',isLoggedIn, validate(modelSchema), async(req, res, next)=>{
-  console.log('/conversation/onDevice');
+//   console.log('/conversation/onDevice');
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;
-  console.log(currUserName);
+//   console.log(currUserName);
   // HandleDB(conversationId, currUserName);
   if(req.body.userQuery === '') return;
-  console.log(req.body);
+//   console.log(req.body);
   let userPrompt = req.body?.userQuery;
   let webResults = await webRes(userPrompt);
   res.send(webResults);

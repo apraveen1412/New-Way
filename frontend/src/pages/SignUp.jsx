@@ -14,7 +14,7 @@ export default function SignUp({flashMsg}){
         password: e.target[2].value,
       };
       const msg = await axios.post('/api/auth/signup', data);
-      console.log(msg);
+      // console.log(msg);
       flashMsg(msg.data);
       if(msg.status===201)
         navigate('/home');

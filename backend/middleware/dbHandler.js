@@ -14,7 +14,7 @@ const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, 
   let currConvId = '';
   let currConversation = {}
   let currUser = await user.findOne({email: currUserName});
-  console.log("Current User",currUser);
+  // console.log("Current User",currUser);
   let conversationName = convNamer(userPrompt);
   if(conversationId === ''){
     newConversation = new conversation({
@@ -24,13 +24,13 @@ const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, 
     currConversation = await newConversation.save();
     currConvId = newConversation._id;
     newConv = true;
-    console.log('New conversation \n',currConversation);
+    // console.log('New conversation \n',currConversation);
     return currConversation;
   }
   else{
     currConvId = conversationId;
     currConversation = await conversation.findById(currConvId);
-    console.log('Existing conversation \n',currConversation);
+    // console.log('Existing conversation \n',currConversation);
   }
 
   if(newConv){
