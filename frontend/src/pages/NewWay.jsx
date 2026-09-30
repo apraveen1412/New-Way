@@ -32,10 +32,16 @@ export default function NewWay({flashMsg, currentUser, setUser}){
     async function getUserQuery(uq) {
       setUserQuery(uq);
     }
-    // console.log(currentUser.conversations);
+
+    const handleNewChat = () => {
+      setConversationId('');
+      setGetMessages([]);
+      setUserQuery('');
+      setNewResponse('');
+    };
     return(
         <div className="new-way-app">
-          <Sidebar flashMsg={flashMsg} conversations = {currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} />
+          <Sidebar flashMsg={flashMsg} conversations={currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} onNewChat={handleNewChat}/>
           <main className='chat-container'>
               <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages}/>
               <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser}/>

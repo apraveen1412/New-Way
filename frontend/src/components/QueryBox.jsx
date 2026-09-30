@@ -13,7 +13,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
     let [localWebResults, setLocalWebResults]=useState(null);
 
     async function saveBD(conversationId, userQuery, fullResponse, modelName){
-        const result = await axios.post('/api/conversation/onDevice/db', {
+        const result = await axios.post('/api/db/onDevice', {
             conversationId: conversationId,
             userPrompt: userQuery,
             fullResponse: fullResponse,

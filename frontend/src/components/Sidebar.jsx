@@ -1,24 +1,25 @@
 import './Sidebar.css';
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import LogOutBtn from './LogOutBtn'
 import axios from 'axios';
 
-export default function Sidebar({flashMsg, conversations, setConversationId, setGetMessages}) {
+export default function Sidebar({ flashMsg, conversations, setConversationId, setGetMessages, onNewChat}) {
     const [open, setOpen] = useState(true);
     const [selectedConversation, setSelectedConversation] = useState(null);
+    const navigate = useNavigate();
     console.log('sidebar: ',conversations);
     // #6c757d
     const handleChat = async (e)=>{
         const conversationId = e.currentTarget.id;
         setConversationId(conversationId);
         setSelectedConversation(conversationId);
-        const getConvMsgs = await axios.get(`/api/conversation/${conversationId}`);
+        const getConvMsgs = await axios.get(`/api/db/${conversationId}`);
         setGetMessages(getConvMsgs.data);
     }
 
     const handleNewChat = (e)=>{
-        setConversationId('');
-        setGetMessages([]);
+        onNewChat();
         setSelectedConversation(null);
     }
     return (

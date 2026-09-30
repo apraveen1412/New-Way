@@ -3,7 +3,7 @@ import  { conversation } from '../models/conversationSchema.js';
 import { messages } from '../models/messagesSchema.js';
 
 function convNamer(userPrompt){
-  const newConversation = userPrompt.replace(/can you|what is|how to|give me|explain/gi, '').trim();
+  const newConversation = userPrompt.replace(/can you|what is|how to|give me|explain|do you know|list all/gi, '').trim();
   if(!newConversation) return 'New Conversation';
   return newConversation;
 }

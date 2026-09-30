@@ -10,7 +10,7 @@ const LogOutBtn = ({flashMsg}) => {
   }
   const handleLogout = async ()=>{
     try{
-        let logoutResults = await axios.get('/api/logout');
+        let logoutResults = await axios.get('/api/auth/logout');
         navigate('/');
         flashMsg?.(logoutResults.data);
     }
