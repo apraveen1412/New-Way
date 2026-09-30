@@ -44,7 +44,7 @@ export default function NewWay({flashMsg, currentUser, setUser}){
           <Sidebar flashMsg={flashMsg} conversations={currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} onNewChat={handleNewChat}/>
           <main className='chat-container'>
               <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages}/>
-              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser}/>
+              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser} setConversationId={setConversationId}/>
           </main>
           <script src='./LocalAI.js'></script>
         </div>

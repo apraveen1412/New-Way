@@ -87,7 +87,11 @@ router.post('/', isLoggedIn, async(req, res, next)=>{
         );
       }
       let DBres = await HandleDB(conversationId, currUserName, userPrompt, fullResponse, modelName);
+
+      // Send conversation ID as the final part of the stream
+        res.write(`\n__CONVERSATION_ID__:${DBres._id}`);
       console.log('DB Response: ',DBres);
+      console.log('DB Response id: ',DBres._id);
         
       // Tells frontend that stream is finished
       res.end();
@@ -105,7 +109,7 @@ router.post('/', isLoggedIn, async(req, res, next)=>{
 });
 
 // local response
-router.post('onDevice',isLoggedIn, async(req, res, next)=>{
+router.post('/onDevice',isLoggedIn, async(req, res, next)=>{
   console.log('/conversation/onDevice');
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;

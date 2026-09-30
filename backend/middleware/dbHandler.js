@@ -25,6 +25,7 @@ const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, 
     currConvId = newConversation._id;
     newConv = true;
     console.log('New conversation \n',currConversation);
+    return currConversation;
   }
   else{
     currConvId = conversationId;

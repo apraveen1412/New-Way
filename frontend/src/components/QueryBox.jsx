@@ -7,19 +7,24 @@ import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
 import { webRes } from './helper';
 
-export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser}){
+export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId}){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
 
-    async function saveBD(conversationId, userQuery, fullResponse, modelName){
+    async function saveBD(conversationId, userQuery, fullResponse, modelName) {
         const result = await axios.post('/api/db/onDevice', {
             conversationId: conversationId,
             userPrompt: userQuery,
             fullResponse: fullResponse,
-            modelName: selectModel
+            modelName: modelName
         });
-        console.log('DB Result: ', result);
+        console.log('DB Result:', result.data);
+        // Store the conversation ID
+        if (result.data.conversationId) {
+            setConversationId(result.data.conversationId);
+            console.log('Conversation ID:', result.data.conversationId);
+        }
     }
 
     const endpoints = {
@@ -47,7 +52,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
 
                 let response = await onDeviceAI(userQuery, result, AIres);
                 console.log('Response: ',response);
-                saveBD(conversationId, userQuery, response, selectModel);
+                await saveBD(conversationId, userQuery, response, selectModel);
                 setRefreshUser(prev => !prev);
                 return;
             }
@@ -90,20 +95,34 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             
                 while (true) {
                     const { value, done } = await reader.read();
-                
                     if (done) break;
-                
                     const chunk = decoder.decode(value, { stream: true });
-                
+                    
                     answer += chunk;
+                    AIres(answer);
+                }
+
+                answer += decoder.decode();
+
+                // Get conversation ID
+                const marker = '__CONVERSATION_ID__:';
+                const markerIndex = answer.indexOf(marker);
+
+                if (markerIndex !== -1) {
+                    const newConversationId = answer
+                        .substring(markerIndex + marker.length)
+                        .trim();
+                
+                    console.log('New conversation ID:', newConversationId);
+                
+                    // Store it for the next message
+                    setConversationId(newConversationId);
+                
+                    // Remove the ID from the displayed AI response
+                    answer = answer.substring(0, markerIndex).trim();
                 
                     AIres(answer);
-                
-                    // console.log("Received:", chunk);
                 }
-            
-                // Process any remaining decoder data
-                answer += decoder.decode();
 
                 console.log("Final answer:", answer);
                 setUserQuery("");
@@ -117,7 +136,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 });
             }
         }
-        AIres(answer);
         setRefreshUser(prev => !prev);
     };
     
