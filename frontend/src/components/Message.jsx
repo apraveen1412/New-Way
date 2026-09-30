@@ -56,6 +56,8 @@ export default function Message({AIres, userQuery}){
         followups = Array.isArray(AIres.followUps) ? AIres.followUps : [];
     }
 
+    
+
     return(
         <div className="msgBody d-flex flex-column ">
             {userQuery?.trim() && (

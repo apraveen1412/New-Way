@@ -43,7 +43,7 @@ export default function Sidebar({flashMsg, conversations, setConversationId, set
                                     <i className="fa-solid fa-plus me-2"></i>New Chat</button>
                                 <p className='m-0 mt-2'>Chats</p>
                                 <ul className="conversationHistory p-0">
-                                    {conversations?.map((conv) => (
+                                    {conversations?.toReversed().map((conv) => (
                                         <li key={conv._id} >
                                             <button
                                                 className={`conversation-btn btn m-0 mt-1 mb-1 w-100 ${selectedConversation === conv._id ? 'conversation-active' : '' }`} id={conv._id} onClick={handleChat}>

@@ -7,7 +7,7 @@ import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
 import { webRes } from './helper';
 
-export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId}){
+export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser}){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
@@ -48,7 +48,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 let response = await onDeviceAI(userQuery, result, AIres);
                 console.log('Response: ',response);
                 saveBD(conversationId, userQuery, response, selectModel);
-
+                setRefreshUser(prev => !prev);
                 return;
             }
             catch(err){
@@ -118,6 +118,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             }
         }
         AIres(answer);
+        setRefreshUser(prev => !prev);
     };
     
     let qSubmit={

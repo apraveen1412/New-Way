@@ -14,6 +14,8 @@ export default function NewWay({flashMsg, currentUser, setUser}){
     let [conversationId, setConversationId] = useState('');
     let [newResponse, setNewResponse] = useState('');
     let [getMessages, setGetMessages] = useState([])
+    const [refreshUser, setRefreshUser] = useState(false);
+
     
     useEffect(()=>{
       const userAuth = async ()=>{
@@ -21,7 +23,7 @@ export default function NewWay({flashMsg, currentUser, setUser}){
         setUser(user.data);
       }
       userAuth();
-    },[]);
+    },[refreshUser]);
   
     async function LocalWebRes(results){
       setWebResults(results);
@@ -33,10 +35,10 @@ export default function NewWay({flashMsg, currentUser, setUser}){
     // console.log(currentUser.conversations);
     return(
         <div className="new-way-app">
-          <Sidebar flashMsg={flashMsg} conversations = {currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages}/>
+          <Sidebar flashMsg={flashMsg} conversations = {currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} />
           <main className='chat-container'>
               <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages}/>
-              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId}/>
+              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser}/>
           </main>
           <script src='./LocalAI.js'></script>
         </div>
