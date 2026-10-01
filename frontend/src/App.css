@@ -2,12 +2,14 @@
     display: flex;
     width: 100%;
     height: 100vh;
+    height: 100dvh;      /* accounts for mobile browser address bars */
 }
 
 .chat-container {
     flex: 1;
     min-width: 0;
     height: 100vh;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -46,4 +48,12 @@
 #flash-btn-close:active{
     border: none !important;
     box-shadow: none !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 576px) {
+    .FlashMsg {
+        width: 92vw;
+        margin-top: 1rem;
+    }
 }

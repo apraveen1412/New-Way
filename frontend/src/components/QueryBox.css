@@ -5,6 +5,8 @@
     border-radius: 2rem;
     display: flex;
     align-items: flex-end;   /* controls stay at the bottom row as the textarea grows */
+    flex-shrink: 0;          /* chat area gives way, not the input */
+    margin: 0.5rem 0 1rem;
 }
 
 #userQuery {
@@ -54,4 +56,46 @@
 
 #userQuery::-webkit-scrollbar-thumb:hover{
     background-color:#c2c2c2;
+}
+
+
+/* ---------- Responsive ---------- */
+
+/* Tablets */
+@media (max-width: 992px) {
+    .qForm {
+        width: 80%;
+    }
+}
+
+/* Phones */
+@media (max-width: 576px) {
+    .qForm {
+        width: 94%;
+        margin-bottom: 0.6rem;
+    }
+
+    #userQuery {
+        min-height: 6vh;
+        max-height: 25vh;
+        padding-block: max(0px, calc((6vh - 1.5em) / 2));
+    }
+
+    .qForm > .dropdown {
+        height: 6vh;
+    }
+
+    .qForm > .qSubmit {
+        margin-bottom: max(0px, calc((6vh - 2rem) / 2));
+    }
+
+    /* keep the model picker compact so the text area keeps room */
+    .qForm > .dropdown .dropdown-toggle {
+        max-width: 6.5rem;
+        padding-inline: 0.4rem;
+        font-size: 0.8rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }

@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import LogOutBtn from './LogOutBtn'
 import axios from 'axios';
 
+const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
 export default function Sidebar({ flashMsg, conversations, setConversationId, setGetMessages, onNewChat}) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(() => !isMobile()); // start collapsed on phones
     const [selectedConversation, setSelectedConversation] = useState(null);
     const navigate = useNavigate();
     // console.log('sidebar: ',conversations);
@@ -14,12 +16,14 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
         const conversationId = e.currentTarget.id;
         setConversationId(conversationId);
         setSelectedConversation(conversationId);
+        if (isMobile()) setOpen(false);   // sidebar overlays the chat on small screens
         const getConvMsgs = await axios.get(`/api/db/${conversationId}`);
         setGetMessages(getConvMsgs.data);
     }
 
     const handleNewChat = (e)=>{
         onNewChat();
+        if (isMobile()) setOpen(false);
         setSelectedConversation(null);
     }
     return (
@@ -32,7 +36,7 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
                         {/* Sidebar Header */}
                         <div className="d-flex align-items-center justify-content-between p-3">
                             {open && ( <h5 className="mb-0">New Way</h5>)}
-                            <button className="btn btn-dark" onClick={() => setOpen(!open)}>
+                            <button className="btn hamburger-menu" onClick={() => setOpen(!open)}>
                                 <i className="fa-solid fa-bars"></i>
                             </button>
                         </div>

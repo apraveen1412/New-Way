@@ -1,7 +1,8 @@
 .resBody{
     text-align: justify;
     width: 100%;
-    height: 90vh;
+    flex: 1;             /* fill the space above the query box, which can now grow */
+    min-height: 0;
     display: flex;
     flex-direction: column;
     align-self: center;
@@ -57,4 +58,33 @@
 .followUpBtns:hover{
   transform: scale(1.01);
   transition: transform 0.1s ease-out;
+}
+
+/* long words, URLs, code blocks and tables must not push the page sideways */
+.resAnswer, .resSources a, .followUpBtns{
+  overflow-wrap: anywhere;
+}
+.resAnswer pre, .resAnswer table{
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.resAnswer img{
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .resBody{
+    padding: 0rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .resBody{
+    padding: 0rem 0.6rem;
+    text-align: left;     /* justified text leaves big gaps on narrow screens */
+    font-size: 0.95rem;
+  }
 }

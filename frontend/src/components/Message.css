@@ -13,3 +13,17 @@
 
 a{color: white}
 a:hover{color: rgb(136, 200, 255);}
+
+.inputQuery p{
+    max-width: 85%;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 576px) {
+    .aiResponse{
+        width: 100%;
+    }
+    .inputQuery p{
+        max-width: 92%;
+    }
+}

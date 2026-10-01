@@ -1,16 +1,24 @@
-
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
+    height: 100dvh;
     width: 25vw;
     transition: width 0.25s ease;
     overflow: hidden;
     z-index: 1000;
     border-right: 1px solid rgba(245, 245, 245, 0.151);
 }
-
+.hamburger-menu:active{
+    border: none;
+}
+.hamburger-menu i{
+    color: #d6d6d6;
+}
+.hamburger-menu i:hover{
+    color: #ffffff;
+}
 .sidebar-open {
     width: 265px;
 }
@@ -62,4 +70,20 @@
 
 .conversation-btn.conversation-active:hover {
     background-color: #495057 !important;
+}
+
+
+/* ---------- Responsive ---------- */
+
+/* Tablets and below: sidebar overlays the chat instead of pushing it */
+@media (max-width: 768px) {
+    .sidebar-open {
+        width: min(265px, 85vw);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* content only ever reserves room for the collapsed bar */
+    .content-sidebar-open {
+        margin-left: 70px;
+    }
 }
