@@ -70,7 +70,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 setLocalWebResults(result.data.webResults);
                 setConversationId(result.data.conversationId);
 
-                let response = await onDeviceAI(userQuery, result, AIres);
+                let response = await onDeviceAI(userQuery, result.data.webResults, AIres);
                 if (response) { // onDeviceAI returns undefined on failure
                     await saveBD(conversationId, sentQuery, response, selectModel);
                     onExchangeDone(sentQuery, response, selectModel);

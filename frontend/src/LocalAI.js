@@ -17,7 +17,7 @@ export async function onDeviceAI(userQuery, webResults, resStream){
   
   // console.log('Generating reply...');
   let structuredWebResults = JSON.stringify(
-    webResults?.data?.raw.map((el, index) => ({
+    webResults?.raw.map((el, index) => ({
       source_id: index + 1,
       title: el.title,
       url: el.url,

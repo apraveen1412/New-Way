@@ -19,6 +19,35 @@
 .hamburger-menu i:hover{
     color: #ffffff;
 }
+.conversationHistory{
+    overflow-y: scroll;
+    height: 77vh;
+} 
+
+
+.conversationHistory::-webkit-scrollbar{
+    width: 12px;
+}
+
+.conversationHistory::-webkit-scrollbar-track{
+    background-color: rgb(52, 52, 59) !important;
+    border-radius: 0.5rem;
+}
+
+.conversationHistory::-webkit-scrollbar-thumb{
+    background-color: #9f9f9f !important;
+    border-radius: 0.5rem;
+}
+
+.conversationHistory::-webkit-scrollbar-thumb:hover{
+    background-color:#c2c2c2;
+}
+
+
+
+
+
+
 .sidebar-open {
     width: 265px;
 }
