@@ -7,7 +7,7 @@ import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
 import { webRes } from './helper';
 
-export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId}){
+export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId, onExchangeDone }){
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
@@ -31,13 +31,14 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
         local: '/api/conversation/onDevice',
         cloud: '/api/conversation/'
     };
+
     const navigate = useNavigate();
+
     const handleSubmbit = async (event) => {
         event.preventDefault();
         if (!userQuery.trim()) return;
-        getUserQuery(userQuery);
-        // console.log("selectModel:", selectModel);
-        // console.log("userQuery:", userQuery);
+        const sentQuery = userQuery;   
+        getUserQuery(sentQuery);
         let answer = "";
 
         // Chrome built-in / on-device model
@@ -50,17 +51,20 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 setLocalWebResults(result);
 
                 let response = await onDeviceAI(userQuery, result, AIres);
-                // console.log('Response: ',response);
-                await saveBD(conversationId, userQuery, response, selectModel);
+                if (response) { // onDeviceAI returns undefined on failure
+                    await saveBD(conversationId, sentQuery, response, selectModel);
+                    onExchangeDone(sentQuery, response, selectModel);
+                    setUserQuery('');   // input is never cleared in this path today
+                }
                 setRefreshUser(prev => !prev);
                 return;
             }
             catch(err){
                 // console.log(err);
-                navigate('/');
+                navigate('/home');
                 flashMsg({
                   success: false,
-                  message: err.response?.data?.message || 'You are not logged in, please sign in!'
+                  message: err.response?.data?.message || 'Something went wrong'
                 });
             }
         }
@@ -116,7 +120,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 
                     AIres(answer);
                 }
-                // console.log("Final answer:", answer);
+                onExchangeDone(sentQuery, answer, selectModel);
                 setUserQuery("");
             }
             catch(err){
@@ -149,13 +153,13 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
     
     return(
         <form onSubmit={handleSubmbit} className='qForm' >
-            <input 
+            <textarea 
                 type="text" 
                 name="userQuery" 
                 placeholder="Ask something..." 
                 id="userQuery" value={userQuery} 
                 onChange={(e)=>setUserQuery(e.target.value)} 
-                className="qBoxStyle form-control-plaintext"
+                className="qBoxStyle form-control-plaintext pe-2"
                 required
             />
 

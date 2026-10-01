@@ -1,65 +1,53 @@
-import {user} from '../models/userSchema.js';
-import  { conversation } from '../models/conversationSchema.js';
+import mongoose from 'mongoose';
+import { user } from '../models/userSchema.js';
+import { conversation } from '../models/conversationSchema.js';
 import { messages } from '../models/messagesSchema.js';
 
-function convNamer(userPrompt){
-  const newConversation = userPrompt.replace(/can you|what is|how to|give me|explain|do you know|list all/gi, '').trim();
-  if(!newConversation) return 'New Conversation';
-  return newConversation;
+function convNamer(userPrompt) {
+  const name = userPrompt
+    .replace(/can you|what is|how to|give me|explain|do you know|list all|does/gi, '')
+    .trim();
+  return name || 'New Conversation';
 }
 
-const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, modelName)=>{
-  let newConversation={};
-  let newConv = false;
-  let currConvId = '';
-  let currConversation = {}
-  let currUser = await user.findOne({email: currUserName});
-  // console.log("Current User",currUser);
-  let conversationName = convNamer(userPrompt);
-  if(conversationId === ''){
-    newConversation = new conversation({
-      conversationName: conversationName,
+/**
+ * Saves one user query + AI response.
+ * - conversationId === ''  -> creates a new conversation and links it to the user
+ * - otherwise              -> appends the message to that (user-owned) conversation
+ * Always returns the conversation id as a plain string.
+ */
+const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, modelName) => {
+  const currUser = await user.findOne({ email: currUserName });
+  if (!currUser) throw new Error('User not found');
+
+  // Validate an existing conversation BEFORE writing anything, so we never leave orphan messages
+  const isNewChat = !conversationId;
+  if (!isNewChat) {
+    if (!mongoose.isValidObjectId(conversationId)) {
+      throw new Error('Invalid conversation id');
+    }
+    const ownsIt = currUser.conversations.some((id) => id.equals(conversationId));
+    if (!ownsIt) throw new Error('Conversation not found');
+  }
+
+  const newMessage = await messages.create({
+    userquery: userPrompt,
+    response: fullResponse,
+    model: modelName,
+  });
+
+  if (isNewChat) {
+    const newConv = await conversation.create({
+      conversationName: convNamer(userPrompt),
+      messages: [newMessage._id],
     });
-    
-    currConversation = await newConversation.save();
-    currConvId = newConversation._id;
-    newConv = true;
-    // console.log('New conversation \n',currConversation);
-    return currConversation;
-  }
-  else{
-    currConvId = conversationId;
-    currConversation = await conversation.findById(currConvId);
-    // console.log('Existing conversation \n',currConversation);
+    // $push is atomic and avoids version conflicts from currUser.save()
+    await user.updateOne({ _id: currUser._id }, { $push: { conversations: newConv._id } });
+    return newConv._id.toString();
   }
 
-  if(newConv){
-    const newMessage = new messages({
-      userquery: userPrompt,
-      response: fullResponse,
-      model: modelName,
-    })
-    let savedMsg = await newMessage.save();
-    newConversation.messages.push(savedMsg);
-    let freshConv = await newConversation.save();
-    currUser.conversations.push(freshConv); 
-    await currUser.save();
-  }
-  else{
-    const newMessage = new messages({
-      userquery: userPrompt,
-      response: fullResponse,
-      model: modelName,
-    })
-    let savedMsg = await newMessage.save();
-    currConversation.messages.push(savedMsg);
-    let updatedConv = await currConversation.save();
-    
-  }
-  if(Object.keys(newConversation).length !== 0 ){
-    return newConversation._id;
-  }
-  else return currConvId;
-}
+  await conversation.updateOne({ _id: conversationId }, { $push: { messages: newMessage._id } });
+  return String(conversationId);
+};
 
 export default HandleDB;

@@ -39,12 +39,22 @@ export default function NewWay({flashMsg, currentUser, setUser}){
       setUserQuery('');
       setNewResponse('');
     };
+
+    const archiveExchange = (query, answer, model) => {
+      setGetMessages(prev => [
+        ...prev,
+        { _id: crypto.randomUUID(), userquery: query, response: answer, model }
+      ]);
+      setUserQuery('');     // clear the live bubble
+      setNewResponse('');   // clear the live stream
+    };
+
     return(
         <div className="new-way-app">
           <Sidebar flashMsg={flashMsg} conversations={currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} onNewChat={handleNewChat}/>
           <main className='chat-container'>
               <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages}/>
-              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser} setConversationId={setConversationId}/>
+              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser} setConversationId={setConversationId} onExchangeDone={archiveExchange}/>
           </main>
           <script src='./LocalAI.js'></script>
         </div>

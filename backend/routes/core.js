@@ -80,7 +80,7 @@ router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
       }
       const DBres = await HandleDB( conversationId, currUserName, userPrompt, fullResponse, modelName);
 
-      console.log('DB Response:', DBres);
+      // console.log('DB Response:', DBres);
 
       res.write(`\n__CONVERSATION_ID__:${DBres}`);
 
