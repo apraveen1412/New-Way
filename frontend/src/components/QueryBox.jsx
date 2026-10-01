@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './QueryBox.css';
@@ -11,6 +11,24 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
     let [userQuery, setUserQuery] = useState('');
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
+    const textareaRef = useRef(null);
+
+    // Auto-grow the textarea with its content (ChatGPT/Claude/Gemini style).
+    // Resets to 'auto' first so it can also shrink when text is deleted or the box is cleared.
+    useLayoutEffect(() => {
+        const el = textareaRef.current;
+        if (!el) return;
+        el.style.height = 'auto';
+        const maxHeight = parseFloat(getComputedStyle(el).maxHeight);
+        const next = el.scrollHeight;
+        if (Number.isFinite(maxHeight) && next > maxHeight) {
+            el.style.height = `${maxHeight}px`;
+            el.style.overflowY = 'auto';      // scroll only once the max height is reached
+        } else {
+            el.style.height = `${next}px`;
+            el.style.overflowY = 'hidden';
+        }
+    }, [userQuery]);
 
     async function saveBD(conversationId, userQuery, fullResponse, modelName) {
         const result = await axios.post('/api/db/onDevice', {
@@ -125,10 +143,10 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             }
             catch(err){
                 // console.log(err);
-                navigate('/');
+                navigate('/home');
                 flashMsg({
                   success: false,
-                  message: err.response?.data?.message || 'You are not logged in, please sign in!'
+                  message: err.response?.data?.message || 'Something went wrong'
                 });
             }
         }
@@ -154,7 +172,8 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
     return(
         <form onSubmit={handleSubmbit} className='qForm' >
             <textarea 
-                type="text" 
+                ref={textareaRef}
+                rows={1}
                 name="userQuery" 
                 placeholder="Ask something..." 
                 id="userQuery" value={userQuery} 
