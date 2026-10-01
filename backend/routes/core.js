@@ -11,6 +11,10 @@ import HandleDB from '../middleware/dbHandler.js';
 import { modelSchema } from '../middleware/joiValidation.js';
 import { validate } from '../middleware/validate.js';
 
+import { convNamer } from '../helper.js';
+
+// models
+import { conversation } from '../models/conversationSchema.js';
 
 const router = express.Router();
 
@@ -103,13 +107,25 @@ router.post('/onDevice',isLoggedIn, validate(modelSchema), async(req, res, next)
 //   console.log('/conversation/onDevice');
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;
-//   console.log(currUserName);
+  let newConv = {};
+  let savedConv = {};
+  if(conversationId === ''){
+    newConv = new conversation({
+      conversationName: convNamer(req.body.userQuery)
+    })
+    savedConv = await newConv.save();
+  }
+  else{
+    savedConv = {_id: conversationId}
+  }
+  console.log(req.body);
+  console.log(savedConv);
   // HandleDB(conversationId, currUserName);
   if(req.body.userQuery === '') return;
 //   console.log(req.body);
   let userPrompt = req.body?.userQuery;
   let webResults = await webRes(userPrompt);
-  res.send(webResults);
+  res.send({webResults, conversationId: savedConv._id});
 });
 
 export default router;

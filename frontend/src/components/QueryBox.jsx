@@ -64,9 +64,11 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             try{
                 const result = await axios.post(endpoints.local,{
                     userQuery: userQuery,
-                    model: selectModel
+                    model: selectModel,
+                    conversationId: conversationId
                 });
-                setLocalWebResults(result);
+                setLocalWebResults(result.data.webResults);
+                setConversationId(result.data.conversationId);
 
                 let response = await onDeviceAI(userQuery, result, AIres);
                 if (response) { // onDeviceAI returns undefined on failure

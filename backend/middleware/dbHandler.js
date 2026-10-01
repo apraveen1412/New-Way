@@ -3,20 +3,10 @@ import { user } from '../models/userSchema.js';
 import { conversation } from '../models/conversationSchema.js';
 import { messages } from '../models/messagesSchema.js';
 
-function convNamer(userPrompt) {
-  const name = userPrompt
-    .replace(/can you|what is|how to|give me|explain|do you know|list all|does/gi, '')
-    .trim();
-  return name || 'New Conversation';
-}
+import { convNamer } from '../helper.js';
 
-/**
- * Saves one user query + AI response.
- * - conversationId === ''  -> creates a new conversation and links it to the user
- * - otherwise              -> appends the message to that (user-owned) conversation
- * Always returns the conversation id as a plain string.
- */
-const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, modelName) => {
+
+const HandleDB = async (conversationId, currUserName, userPrompt, fullResponse, modelName)=> {
   const currUser = await user.findOne({ email: currUserName });
   if (!currUser) throw new Error('User not found');
 

@@ -199,3 +199,11 @@ Before producing the final response, verify that:
 6. There are 2 to 4 follow-up questions.
 7. No unsupported factual claims have been introduced.
 8. The final output is valid Markdown.`;
+
+
+export function convNamer(userPrompt) {
+  const name = userPrompt
+    .replace(/can you|what is|how to|give me|explain|do you know|list all|does/gi, '')
+    .trim();
+  return name || 'New Conversation';
+}
