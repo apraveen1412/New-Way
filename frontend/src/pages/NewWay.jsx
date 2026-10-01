@@ -18,6 +18,32 @@ export default function NewWay({flashMsg, currentUser, setUser}){
 
     
     useEffect(()=>{
+      const root = document.documentElement;
+      const vv = window.visualViewport;
+      root.classList.add('chat-lock');
+
+      const syncViewport = ()=>{
+        root.style.setProperty('--app-height', `${vv ? vv.height : window.innerHeight}px`);
+        root.style.setProperty('--app-top', `${vv ? vv.offsetTop : 0}px`);
+        if (window.scrollY !== 0) window.scrollTo(0, 0);
+      };
+
+      syncViewport();
+      vv?.addEventListener('resize', syncViewport);
+      vv?.addEventListener('scroll', syncViewport);
+      window.addEventListener('orientationchange', syncViewport);
+
+      return ()=>{
+        vv?.removeEventListener('resize', syncViewport);
+        vv?.removeEventListener('scroll', syncViewport);
+        window.removeEventListener('orientationchange', syncViewport);
+        root.classList.remove('chat-lock');
+        root.style.removeProperty('--app-height');
+        root.style.removeProperty('--app-top');
+      };
+    },[]);
+
+    useEffect(()=>{
       const userAuth = async ()=>{
         const user = await axios.get('/api/auth/me');
         setUser(user.data);

@@ -16,6 +16,32 @@
     align-items: center;
 }
 
+
+html.chat-lock,
+html.chat-lock body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background-color: #212529;   /* no white showing through behind the keyboard */
+}
+
+html.chat-lock .new-way-app {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--app-top, 0px);
+    height: var(--app-height, 100dvh);
+}
+
+html.chat-lock .chat-container {
+    height: 100%;
+}
+
+html.chat-lock .sidebar {
+    position: absolute;          /* relative to .new-way-app, so it follows the same area */
+    height: 100%;
+}
+
 .bg-black{
     background-color: rgb(9 9 9) !important;
 }
