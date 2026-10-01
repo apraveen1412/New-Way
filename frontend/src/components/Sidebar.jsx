@@ -46,8 +46,7 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
                                 <ul className="conversationHistory p-0">
                                     {conversations?.toReversed().map((conv) => (
                                         <li key={conv._id} >
-                                            <button
-                                                className={`conversation-btn btn m-0 mt-1 mb-1 w-100 ${selectedConversation === conv._id ? 'conversation-active' : '' }`} id={conv._id} onClick={handleChat}>
+                                            <button className={`conversation-btn btn m-0 mt-1 mb-1 w-100 ${selectedConversation === conv._id ? 'conversation-active' : '' }`} id={conv._id} onClick={handleChat}>
                                                 {conv.conversationName}
                                             </button>
                                         </li>
@@ -58,7 +57,7 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
                             </div>
                         )}
                     </div>
-                    <LogOutBtn flashMsg={flashMsg}/>
+                    {open && <LogOutBtn flashMsg={flashMsg}/>}
                 </div>
             </aside>
 
