@@ -56,6 +56,7 @@ export default function Message({AIres, userQuery}){
         followups = Array.isArray(AIres.followUps) ? AIres.followUps : [];
     }
 
+
     
 
     return(
@@ -80,7 +81,7 @@ export default function Message({AIres, userQuery}){
                     <div className = "resFollowUps mt-3">
                         {followups.length > 0 ? <h5>Follow ups</h5> : null}
                         {followups?.map((followup, index)=>{
-                            return <button key={index} className='followUpBtns'>{followup.question}</button>
+                            return <button key={index} className='followUpBtns' >{followup.question}</button>
                         })}
                     </div>
                 </div>

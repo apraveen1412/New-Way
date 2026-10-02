@@ -7,10 +7,7 @@ import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
 import { webRes } from './helper';
 
-export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId, onExchangeDone }){
-    let [userQuery, setUserQuery] = useState('');
-    let [selectModel, setSelectModel] = useState('');
-    let [localWebResults, setLocalWebResults]=useState(null);
+export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId, onExchangeDone, userQuery, setUserQuery, localWebResults, setLocalWebResults, selectModel, setSelectModel }){
     const textareaRef = useRef(null);
 
     // Auto-grow the textarea with its content (ChatGPT/Claude/Gemini style).
@@ -45,14 +42,15 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
         }
     }
 
-    const endpoints = {
-        local: '/api/conversation/onDevice',
-        cloud: '/api/conversation/'
-    };
+    
 
     const navigate = useNavigate();
 
-    const handleSubmbit = async (event) => {
+    const handleSubmit = async (event) => {
+        const endpoints = {
+            local: '/api/conversation/onDevice',
+            cloud: '/api/conversation/'
+        };
         event.preventDefault();
         if (!userQuery.trim()) return;
         const sentQuery = userQuery;   
@@ -64,7 +62,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             try{
                 const result = await axios.post(endpoints.local,{
                     userQuery: userQuery,
-                    model: selectModel,
+                    model: 'Gemini Nano',
                     conversationId: conversationId
                 });
                 setLocalWebResults(result.data.webResults);
@@ -172,7 +170,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
     
     
     return(
-        <form onSubmit={handleSubmbit} className='qForm' >
+        <form onSubmit={handleSubmit} className='qForm' >
             <textarea 
                 ref={textareaRef}
                 rows={1}

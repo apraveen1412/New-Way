@@ -15,6 +15,8 @@ export default function NewWay({flashMsg, currentUser, setUser}){
     let [newResponse, setNewResponse] = useState('');
     let [getMessages, setGetMessages] = useState([])
     const [refreshUser, setRefreshUser] = useState(false);
+    let [selectModel, setSelectModel] = useState('');
+    let [localWebResults, setLocalWebResults]=useState(null);
 
     
     useEffect(()=>{
@@ -75,12 +77,23 @@ export default function NewWay({flashMsg, currentUser, setUser}){
       setNewResponse('');   // clear the live stream
     };
 
+    const submitProps = {
+      conversationId,
+      setConversationId,
+      getUserQuery: setUserQuery,
+      setNewResponse,
+      onExchangeDone: archiveExchange,
+      setRefreshUser,
+      flashMsg,
+    };
+
     return(
         <div className="new-way-app">
           <Sidebar flashMsg={flashMsg} conversations={currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} onNewChat={handleNewChat}/>
           <main className='chat-container'>
-              <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages}/>
-              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser} setConversationId={setConversationId} onExchangeDone={archiveExchange}/>
+              <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages} submitProps ={submitProps}/>
+              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser} setConversationId={setConversationId} onExchangeDone={archiveExchange} userQuery={userQuery} setUserQuery={setUserQuery} localWebResults={localWebResults} setLocalWebResults={setLocalWebResults} selectModel={selectModel} setSelectModel={setSelectModel}/>
+              
           </main>
           <script src='./LocalAI.js'></script>
         </div>
