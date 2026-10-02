@@ -12,7 +12,7 @@ import { isLoggedIn } from '../middleware/authenticate.js';
 import { signUpSchema, signInSchema } from '../middleware/joiValidation.js';
 import { validate } from '../middleware/validate.js';
 
-
+import ErrorHandler from '../middleware/ErrorHandler.js';
 
 const router = express.Router();
 
@@ -44,14 +44,11 @@ router.post('/signup',validate(signUpSchema), async (req, res, next) => {
               })
             }
             else{
-              return res.status(400).json({ success: false, message: 'Invalid input' });
+              throw new ErrorHandler(400, 'Invalid input');
             }
         } catch (error) {
             // console.error("SIGNUP ERROR:", error);
-            res.status(500).json({
-                success: false,
-                message: error.message
-            });
+            throw new ErrorHandler(500, error.message);    
         }
     })
 
@@ -73,10 +70,7 @@ router.post('/signin',validate(signInSchema), async(req, res, next) => { // Defi
                 return next(err);
             }
             if (!user) { // Handles errors of user credentials being falsy 
-                return res.status(401).json({
-                    success: false,
-                    message: info?.message || 'Invalid email or password'
-                });
+                throw new ErrorHandler(401, info?.message || 'Invalid email or password')
             }
             req.logIn(user, (err) => {
                 if (err) {
@@ -93,7 +87,7 @@ router.post('/signin',validate(signInSchema), async(req, res, next) => { // Defi
           })(req, res, next); // Executing the passport middleware in the current req res cycle.
         }
         else{
-          return res.status(400).json({ success: false, message: 'Invalid email or password' });
+          throw new ErrorHandler(400, 'Invalid email or password');
         }
     })
 

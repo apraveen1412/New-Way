@@ -16,6 +16,8 @@ import { convNamer } from '../helper.js';
 // models
 import { conversation } from '../models/conversationSchema.js';
 
+import ErrorHandler from '../middleware/ErrorHandler.js';
+
 const router = express.Router();
 
 
@@ -93,9 +95,7 @@ router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
   } catch (error) {
     //   console.error("/conversation failed:", error.message);
       if (!res.headersSent) {
-          res.status(500).json({
-              error: error.message
-          });
+          throw new ErrorHandler(500, error.message);
       } else {
           res.end();
       }

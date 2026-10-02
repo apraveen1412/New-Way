@@ -80,8 +80,19 @@ passport.use(new localStrategy(user.authenticate()));
 passport.serializeUser(user.serializeUser()); // storing all the info about the user in session is known as serialize
 passport.deserializeUser(user.deserializeUser()); // removing all the info about the user in session is known as deserialize
 
-app.listen(8080, ()=>console.log("Server is running on port: 8080"));
 
 app.use('/api/auth', authentication);
 app.use('/api/conversation', core);
 app.use('/api/db', dbRoutes);
+
+// Global error handler
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+
+    res.status(status).json({
+        success: false,
+        message: err.message || "Internal Server Error"
+    });
+});
+
+app.listen(8080, ()=>console.log("Server is running on port: 8080"));

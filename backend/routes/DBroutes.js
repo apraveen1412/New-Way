@@ -4,9 +4,10 @@ import express from 'express';
 import  { conversation } from '../models/conversationSchema.js';
 
 // Authentication
-import { isLoggedIn } from '../middleware/authenticate.js';
+import { isLoggedIn, isOwner } from '../middleware/authenticate.js';
 import HandleDB from '../middleware/dbHandler.js';
 
+import ErrorHandler from '../middleware/ErrorHandler.js';
 
 const router = express.Router();
 
@@ -28,16 +29,15 @@ router.post('/onDevice', isLoggedIn, async (req, res, next) => {
 
     } catch (error) {
         console.error('Local DB error:', error);
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        throw new ErrorHandler(500, error.message);
     }
 });
 
-router.get('/:id', isLoggedIn, async(req, res, next)=>{
+
+// gets messages
+router.get('/:id', isLoggedIn, isOwner, async(req, res, next)=>{
   
-  // res.send('This is messages');
+  console.log('This is messages');
   const fetchConv = await conversation.findById(req.params.id).populate({
     path: 'messages'
   });
