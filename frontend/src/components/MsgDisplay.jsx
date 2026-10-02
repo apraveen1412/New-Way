@@ -134,6 +134,7 @@ export default function MsgDisplay({ msg, submitProps }) {
                 onExchangeDone(sentQuery, streamed, model);
             }
         } catch (err) {
+            setUserQuery('');
             navigate('/home');
             flashMsg({
                 success: false,

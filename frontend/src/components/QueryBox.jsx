@@ -74,11 +74,13 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                     onExchangeDone(sentQuery, response, selectModel);
                     setUserQuery('');   // input is never cleared in this path today
                 }
+                
                 setRefreshUser(prev => !prev);
                 return;
             }
             catch(err){
                 // console.log(err);
+                setUserQuery('');  
                 navigate('/home');
                 flashMsg({
                   success: false,
@@ -142,6 +144,7 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                 setUserQuery("");
             }
             catch(err){
+                getUserQuery('');  
                 // console.log(err);
                 navigate('/home');
                 flashMsg({

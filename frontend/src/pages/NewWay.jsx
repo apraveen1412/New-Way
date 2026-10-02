@@ -17,7 +17,7 @@ export default function NewWay({flashMsg, currentUser, setUser}){
     const [refreshUser, setRefreshUser] = useState(false);
     let [selectModel, setSelectModel] = useState('');
     let [localWebResults, setLocalWebResults]=useState(null);
-
+    let [inputText, setInputText] = useState('');
     
     useEffect(()=>{
       const root = document.documentElement;
@@ -92,7 +92,19 @@ export default function NewWay({flashMsg, currentUser, setUser}){
           <Sidebar flashMsg={flashMsg} conversations={currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} onNewChat={handleNewChat}/>
           <main className='chat-container'>
               <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages} submitProps ={submitProps}/>
-              <QueryBox getWebRes={LocalWebRes} getUserQuery={getUserQuery} AIres={setNewResponse} flashMsg={flashMsg} conversationId={conversationId} setRefreshUser={setRefreshUser} setConversationId={setConversationId} onExchangeDone={archiveExchange} userQuery={userQuery} setUserQuery={setUserQuery} localWebResults={localWebResults} setLocalWebResults={setLocalWebResults} selectModel={selectModel} setSelectModel={setSelectModel}/>
+              <QueryBox
+                getUserQuery={getUserQuery}
+                AIres={setNewResponse}
+                flashMsg={flashMsg}
+                conversationId={conversationId}
+                setRefreshUser={setRefreshUser}
+                setConversationId={setConversationId}
+                onExchangeDone={archiveExchange}
+                userQuery={inputText}
+                setUserQuery={setInputText}
+                selectModel={selectModel}
+                setSelectModel={setSelectModel}
+              />
               
           </main>
           <script src='./LocalAI.js'></script>
