@@ -1,27 +1,3 @@
-
-
-export async function webRes(userQuery){
-
-    try {
-    // Execute the search
-    const response = await webResults;
-
-    // Format the raw results for LLM Prompt
-    const formattedResults = response.results.map((result, index) => {
-      return `[${index + 1}] ${result.title} (${result.url}): ${result.content}`;
-    }).join('\n\n');
-
-    return {
-      raw: response.results, // Send this to the React frontend to display clickable links
-      formattedForLLM: formattedResults // Inject this into Master Prompt
-    };
-
-  } catch (error) {
-    console.error("Tavily Search Error:", error);
-    throw new Error("Failed to fetch web search results.");
-  }
-}
-
 export const master_prompt = `You are an expert, objective AI search assistant.
 
 Your goal is to provide a comprehensive, accurate, and concise answer to the user's query based strictly on the provided web search results.

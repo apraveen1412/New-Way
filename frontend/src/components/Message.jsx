@@ -4,8 +4,8 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import './Message.css'
 
 export default function Message({AIres, userQuery}){
-    let answer = ''; 
-    let sources = []; 
+    let answer;
+    let sources = [];
     let followups = [];
     
     const sourceMarker = '#### Sources';
@@ -54,8 +54,6 @@ export default function Message({AIres, userQuery}){
 
     } else {
         answer = AIres.trim() || '';
-        sources = Array.isArray(AIres.sources) ? AIres.sources : [];
-        followups = Array.isArray(AIres.followUps) ? AIres.followUps : [];
     }
 
 

@@ -7,7 +7,6 @@ export default function ModelSelection({ aiModel }) {
     const [isDesktop, setIsDesktop] = useState(false);
 
     let Local_Endpoint = '/api/conversation/onDevice';
-    let Cloud_Endpoint = '/api/conversation';
 
     let models = [
         'Gemini nano (Local)',

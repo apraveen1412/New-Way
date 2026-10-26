@@ -1,13 +1,12 @@
 import axios from 'axios';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './QueryBox.css';
 import ModelSelection from './ModelSelection';
 import { onDeviceAI } from '../LocalAI';
-import { webRes } from './helper';
 
-export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId, onExchangeDone, userQuery, setUserQuery, localWebResults, setLocalWebResults, selectModel, setSelectModel }){
+export default  function QueryBox({getUserQuery, AIres, flashMsg, conversationId, setRefreshUser, setConversationId, onExchangeDone, userQuery, setUserQuery, selectModel, setSelectModel }){
     const textareaRef = useRef(null);
 
     // Auto-grow the textarea with its content (ChatGPT/Claude/Gemini style).
@@ -65,7 +64,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
                     model: 'Gemini Nano',
                     conversationId: conversationId
                 });
-                setLocalWebResults(result.data.webResults);
 
                 let response = await onDeviceAI(userQuery, result.data.webResults, AIres);
                 if (response) { // onDeviceAI returns undefined on failure
@@ -185,7 +183,6 @@ export default  function QueryBox({getWebRes, getUserQuery, AIres, flashMsg, con
             />
 
             <ModelSelection aiModel={aiModel}/>
-            <input type="hidden" name="conversationId" />
             <button type="submit" id="qSubmit" className='qSubmit btn btn-primary' style={qSubmit}>
                 <i className="fa-solid fa-arrow-up" style={{color: "rgb(255, 255, 255)"}}></i>
             </button>

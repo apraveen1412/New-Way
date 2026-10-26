@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './SignUp.css';
 import axios from 'axios';
 
 export default function SignUp({flashMsg}){
-  let[err, setErr]=useState(null);
   const navigate = useNavigate();  
   const handleSignup = async (e)=>{
       e.preventDefault();
@@ -17,8 +15,9 @@ export default function SignUp({flashMsg}){
         let msg = await axios.post('/api/auth/signup', data);
         // console.log(msg);
         flashMsg(msg.data);
-        if(msg.status===201)
+        if(msg.status===201){
           navigate('/home');
+        }
       } catch (error) {
         flashMsg({
           success: false,

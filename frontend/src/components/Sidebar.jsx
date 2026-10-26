@@ -1,6 +1,5 @@
 import './Sidebar.css';
-import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 import LogOutBtn from './LogOutBtn'
 import axios from 'axios';
 
@@ -9,7 +8,6 @@ const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
 export default function Sidebar({ flashMsg, conversations, setConversationId, setGetMessages, onNewChat}) {
     const [open, setOpen] = useState(() => !isMobile()); // start collapsed on phones
     const [selectedConversation, setSelectedConversation] = useState(null);
-    const navigate = useNavigate();
     // console.log('sidebar: ',conversations);
     // #6c757d
     const handleChat = async (e)=>{
@@ -21,7 +19,7 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
         setGetMessages(getConvMsgs.data);
     }
 
-    const handleNewChat = (e)=>{
+    const handleNewChat = ()=>{
         onNewChat();
         if (isMobile()) setOpen(false);
         setSelectedConversation(null);
@@ -65,10 +63,8 @@ export default function Sidebar({ flashMsg, conversations, setConversationId, se
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <main className={`main-content ${ open ? "content-sidebar-open" : "content-sidebar-closed"}`}>
-                {/* chat UI goes here */}
-            </main>
+            {/* Spacer: the sidebar is out of flow, so this reserves its width beside the chat */}
+            <div className={`main-content ${ open ? "content-sidebar-open" : "content-sidebar-closed"}`} aria-hidden="true"></div>
         </>
     );
 }

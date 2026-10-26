@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import './SignIn.css';
 
 export default function SignIn({flashMsg, setUser}){
-  let[err, setErr]=useState(null);
   const navigate = useNavigate();  
   const handleSignIn = async (e)=>{
     e.preventDefault();

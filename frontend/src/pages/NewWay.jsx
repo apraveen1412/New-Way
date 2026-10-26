@@ -1,5 +1,4 @@
 import {useEffect, useState } from 'react';
-import {onDeviceAI} from '../LocalAI.js';
 import axios from 'axios';
 
 import QueryBox from "../components/QueryBox.jsx";
@@ -10,14 +9,12 @@ import { useNavigate } from 'react-router-dom';
 // import './NewWay.css';
 
 export default function NewWay({flashMsg, currentUser, setUser}){
-    let [webResults, setWebResults]=useState(null);
     let [userQuery, setUserQuery]= useState('');
     let [conversationId, setConversationId] = useState('');
     let [newResponse, setNewResponse] = useState('');
     let [getMessages, setGetMessages] = useState([])
     const [refreshUser, setRefreshUser] = useState(false);
     let [selectModel, setSelectModel] = useState('');
-    let [localWebResults, setLocalWebResults]=useState(null);
     let [inputText, setInputText] = useState('');
     
     const navigate = useNavigate();
@@ -52,16 +49,16 @@ export default function NewWay({flashMsg, currentUser, setUser}){
         try {
           const user = await axios.get('/api/auth/me');
           setUser(user.data);
-        } catch (error) {
+        } catch {
           navigate('/')
+          flashMsg({
+            success: true,
+            message: 'Please Sign in'
+          })
         }
       }
       userAuth();
-    },[refreshUser]);
-  
-    async function LocalWebRes(results){
-      setWebResults(results);
-    }
+    },[refreshUser, setUser, navigate]);
 
     async function getUserQuery(uq) {
       setUserQuery(uq);
@@ -98,8 +95,7 @@ export default function NewWay({flashMsg, currentUser, setUser}){
           <Sidebar flashMsg={flashMsg} conversations={currentUser?.conversations} setConversationId={setConversationId} setGetMessages={setGetMessages} onNewChat={handleNewChat}/>
           <main className='chat-container'>
               <ChatBody AIres={newResponse} userQuery={userQuery} getMessages={getMessages} submitProps ={submitProps}/>
-              <QueryBox 
-                getWebRes={LocalWebRes} 
+              <QueryBox
                 getUserQuery={getUserQuery} 
                 AIres={setNewResponse} 
                 flashMsg={flashMsg} 
@@ -108,14 +104,11 @@ export default function NewWay({flashMsg, currentUser, setUser}){
                 setConversationId={setConversationId} 
                 onExchangeDone={archiveExchange} 
                 userQuery={inputText} 
-                setUserQuery={setInputText} 
-                localWebResults={localWebResults} 
-                setLocalWebResults={setLocalWebResults} 
+                setUserQuery={setInputText}
                 selectModel={selectModel} 
                 setSelectModel={setSelectModel}/>
               
           </main>
-          <script src='./LocalAI.js'></script>
         </div>
         
     );

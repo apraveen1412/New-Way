@@ -36,8 +36,6 @@ router.post('/onDevice', isLoggedIn, async (req, res, next) => {
 
 // gets messages
 router.get('/:id', isLoggedIn, isOwner, async(req, res, next)=>{
-  
-  console.log('This is messages');
   const fetchConv = await conversation.findById(req.params.id).populate({
     path: 'messages'
   });

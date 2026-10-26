@@ -1,5 +1,3 @@
-import express from 'express';
-import passport from 'passport';
 import ErrorHandler from './ErrorHandler.js';
 
 export const isLoggedIn = (req, res, next) =>{

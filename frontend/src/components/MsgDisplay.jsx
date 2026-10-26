@@ -42,7 +42,7 @@ export default function MsgDisplay({ msg, submitProps }) {
 
     const navigate = useNavigate();
 
-    let answer = '';
+    let answer;
     let sources = [];
     let followups = [];
 

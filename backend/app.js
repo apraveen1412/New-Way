@@ -1,7 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -10,19 +9,8 @@ import { Strategy as localStrategy } from 'passport-local';
 import passport from 'passport';
 import dns from 'dns'
 
-import {webRes, master_prompt} from './helper.js';
-
-
-
-
 // DB models
 import {user} from './models/userSchema.js';
-import  { conversation } from './models/conversationSchema.js';
-import { messages } from './models/messagesSchema.js';
-
-// Authentication
-import { isLoggedIn } from './middleware/authenticate.js';
-import HandleDB from './middleware/dbHandler.js';
 
 // routes
 import authentication from './routes/authentication.js'

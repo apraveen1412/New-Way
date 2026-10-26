@@ -18,14 +18,8 @@ export async function webRes(userQuery){
       excludeDomains: []    // Optional: block specific sites
     });
 
-    // Format the raw results for LLM Prompt
-    const formattedResults = response?.results.map((result, index) => {
-      return '[${index + 1}] ${result.title} (${result.url}): ${result.content}';
-    }).join('\n\n');
-
     return {
-      raw: response.results, // Send this to the React frontend to display clickable links
-      formattedForLLM: formattedResults // Inject this into Master Prompt
+      raw: response.results, // Structured into the LLM prompt by the conversation routes
     };
 
   } catch (error) {
@@ -193,8 +187,8 @@ Before producing the final response, verify that:
 
 1. Every citation such as [1] refers to an existing 'source_id'.
 2. Every citation is supported by the corresponding source.
-3. Every source listed under "## Sources" was actually used or cited.
-4. Every cited source is included under "## Sources".
+3. Every source listed under "#### Sources" was actually used or cited.
+4. Every cited source is included under "#### Sources".
 5. Source titles and URLs exactly match the provided search results.
 6. There are 2 to 4 follow-up questions.
 7. No unsupported factual claims have been introduced.

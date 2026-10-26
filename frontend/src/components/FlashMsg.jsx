@@ -1,5 +1,3 @@
-import React from 'react'
-
 const FlashMsg = ({flashMsg, setFlashMsg}) => {
   return (
     <div className={`FlashMsg ${flashMsg.message !== ''? 'show': ''} ${flashMsg.success ? 'success' : 'error'}`}>  
