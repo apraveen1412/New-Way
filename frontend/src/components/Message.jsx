@@ -44,11 +44,13 @@ export default function Message({AIres, userQuery}){
             })
 
         // Extract follow ups
-        const followUpText = AIres.slice((followUpIndex + followUpMarker.length)+1); 
-        followups = followUpText.split('\n').map(line => line.trim()).filter(line => line.startsWith('-')).map(line => {
-            line = line.replace(/^-\\s*/, '').trim();
-            return({question: line});
-        });
+        if (followUpIndex !== -1) {
+            const followUpText = AIres.slice(followUpIndex + followUpMarker.length);
+            followups = followUpText.split('\n').map(line => line.trim()).filter(line => line.startsWith('-')).map(line => {
+                line = line.replace(/^-\s*/, '').trim();
+                return({question: line});
+            });
+        }
 
     } else {
         answer = AIres.trim() || '';

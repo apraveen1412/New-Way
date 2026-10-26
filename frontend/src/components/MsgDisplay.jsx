@@ -134,12 +134,13 @@ export default function MsgDisplay({ msg, submitProps }) {
                 onExchangeDone(sentQuery, streamed, model);
             }
         } catch (err) {
-            setUserQuery('');
+            getUserQuery('');
             navigate('/home');
             flashMsg({
-                success: false,
-                message: err.response?.data?.message || 'Something went wrong'
+              success: false,
+              message: err.response?.data?.message || 'Something went wrong'
             });
+            
         } finally {
             setRefreshUser(prev => !prev);
         }

@@ -13,6 +13,12 @@ export const signInSchema = Joi.object({
 
 export const modelSchema = Joi.object({
     userQuery: Joi.string().min(1).required(),
+    model: Joi.string().valid("gpt-5.6-luna", "gpt-5.6-sol").required(),
+    conversationId: Joi.string().allow('').required()
+});
+
+export const localModelSchema = Joi.object({
+    userQuery: Joi.string().min(1).required(),
     model: Joi.string().required(),
     conversationId: Joi.string().allow('').required()
 });

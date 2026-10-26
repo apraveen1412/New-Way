@@ -41,7 +41,7 @@ async function main(){
     await mongoose.connect(process.env.MONGO_URI);
 }
 
-main().then(console.log('Successfully connected to DB'))
+main().then(() => console.log('Successfully connected to DB'))
 .catch((err)=>console.log(err));
 
 app.use(cors({

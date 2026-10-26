@@ -13,13 +13,18 @@ export default function SignUp({flashMsg}){
         email: e.target[1].value,
         password: e.target[2].value,
       };
-      const msg = await axios.post('/api/auth/signup', data);
-      // console.log(msg);
-      flashMsg(msg.data);
-      if(msg.status===201)
-        navigate('/home');
-
-        
+      try {
+        let msg = await axios.post('/api/auth/signup', data);
+        // console.log(msg);
+        flashMsg(msg.data);
+        if(msg.status===201)
+          navigate('/home');
+      } catch (error) {
+        flashMsg({
+          success: false,
+          message: error.response?.data?.message || 'Sign up failed'
+        })
+      } 
     }
 
     return(

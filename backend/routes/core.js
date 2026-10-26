@@ -8,13 +8,8 @@ import { isLoggedIn } from '../middleware/authenticate.js';
 import HandleDB from '../middleware/dbHandler.js';
 
 // Validation
-import { modelSchema } from '../middleware/joiValidation.js';
+import { localModelSchema, modelSchema } from '../middleware/joiValidation.js';
 import { validate } from '../middleware/validate.js';
-
-import { convNamer } from '../helper.js';
-
-// models
-import { conversation } from '../models/conversationSchema.js';
 
 import ErrorHandler from '../middleware/ErrorHandler.js';
 
@@ -24,11 +19,6 @@ const router = express.Router();
 // cloud response
 router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
   const modelName = req.body.model;
-//   console.log(req.session.passport);
-//   console.log(req.user);
-//   console.log("MODEL:", modelName);
-//   console.log("BODY:", req.body);
-//   console.log(`/conversation/${modelName}`);
   
   let currUserName = req.session.passport.user;
   let conversationId = req.body.conversationId;
@@ -103,29 +93,13 @@ router.post('/', isLoggedIn, validate(modelSchema), async(req, res, next)=>{
 });
 
 // local response
-router.post('/onDevice',isLoggedIn, validate(modelSchema), async(req, res, next)=>{
+router.post('/onDevice',isLoggedIn, validate(localModelSchema), async(req, res, next)=>{
 //   console.log('/conversation/onDevice');
-  let currUserName = req.session.passport.user;
+  // The conversation is created by HandleDB when the answer is saved (/api/db/onDevice)
   let conversationId = req.body.conversationId;
-  let newConv = {};
-  let savedConv = {};
-  if(conversationId === ''){
-    newConv = new conversation({
-      conversationName: convNamer(req.body.userQuery)
-    })
-    savedConv = await newConv.save();
-  }
-  else{
-    savedConv = {_id: conversationId}
-  }
-  console.log(req.body);
-  console.log(savedConv);
-  // HandleDB(conversationId, currUserName);
-  if(req.body.userQuery === '') return;
-//   console.log(req.body);
   let userPrompt = req.body?.userQuery;
   let webResults = await webRes(userPrompt);
-  res.send({webResults, conversationId: savedConv._id});
+  res.send({webResults, conversationId});
 });
 
 export default router;
